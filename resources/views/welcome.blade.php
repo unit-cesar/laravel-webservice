@@ -91,14 +91,25 @@
                 <button>Enviar</button>
             </form>
         </div>
-        <br><br><br>
-        <div>
+        <div style="padding-top: 50px">
             <form action="/fooControllerPost" method="POST">
                 @csrf
                 <input type="text" name="id" placeholder="Id to Controller">
                 <br>
                 <button>Enviar</button>
             </form>
+        </div>
+        <div style="padding-top: 50px">
+            <a href="{{ route('contacts') }}">Contatos</a>
+            {{--Pra enviar parametros:--}}
+            {{--<a href="{{ route('contacts', $data->id) }}">Contatos</a>--}}
+        </div>
+        <div style="padding-top: 50px">
+            {{--<a href="{{ route('contacts.show',[435]) }}">contato/{id} as contacts.show</a>--}}
+            <a href="{{ route('contacts.show','435') }}">contato/{id} as contacts.show</a>
+        </div>
+        <div style="padding-top: 50px">
+            <a href="{{ route('admin.courses') }}">Rota interna: adm/curso as admin.courses</a>
         </div>
     </div>
 

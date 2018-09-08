@@ -1,13 +1,12 @@
 <?php
 
-namespace App\Http\Controllers\tests;
+namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
-class TestsController extends Controller
+class TestController extends Controller
 {
-    //
     public function foo(Request $req)
     {
 //        dd($req);
@@ -19,6 +18,6 @@ class TestsController extends Controller
     {
 //        dd($req);
 //        dd($req->all());
-        return (isset($req['id']) && $req['id']!='') ? "Controller ok! - id: " . $req['id'] : "Controller ok! - Sem ID";
+        return (isset($req['id']) && $req['id'] != '') ? "Controller ok! - id: " . $req['id'] : "Controller ok! - Sem ID";
     }
 }
