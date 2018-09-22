@@ -7,13 +7,14 @@
 <body>
 <ul>
     <li>
-        <a href="{{ route('home') }}">HOME</a>
+        <a href="{{ route('root') }}">HOME</a>
     </li>
     <li>
         <a href="{{ route('admin.courses') }}">CURSOS</a>
     </li>
     <li>
-        <a href="{{ route('admin.courses.new') }}">CADASTRAR NOVO CURSO</a>
+        {{--<a href="{{ route('admin.courses.new') }}">CADASTRAR NOVO CURSO</a>--}}
+        <a href="{{ route('admin.courses.create') }}">CADASTRAR NOVO CURSO</a>
     </li>
 </ul>
 
@@ -62,7 +63,8 @@
                 <input type="checkbox" name="status" id="status"
                        value="true" {{ isset($record->status) && $record->status === 'y' ? 'checked' : '' }}><br>
                 {{--Altera form pra PUT--}}
-                <input type="hidden" name="_method" value="put">
+                {{--<input type="hidden" name="_method" value="put">--}}
+                @method('PUT')
                 <button>Atualizar curso</button>
             </form>
         @else
@@ -80,19 +82,67 @@
                 <li>
                     <ul>
                         <li>Id: {{ $iten->id }}</li>
-                        <li>Curso: {{ $iten->name }}</li>
+                        <li><a href="{{ route('admin.courses.show', $iten->id) }}">Curso: {{ $iten->name }}</a></li>
                         <li>Preço: {{ $iten->price }}</li>
                         <li>Descrição: {{ $iten->description }}</li>
                         <li>Publicar: {{ $iten->status === 'y' ? 'sim' : 'não' }}</li>
                         <li>Imagem: {{ isset($iten->image) ? $iten->image : '[Sem imagem]' }}</li>
-                        <li>
-                            <a href="{{ route('admin.courses.delete',[$iten->id]) }}">DELETAR</a>&nbsp;|&nbsp;
-                            <a href="{{ route('admin.courses.edit',[$iten->id]) }}">EDITAR</a>&nbsp;
-                        </li>
                     </ul>
+
+                    <div style="padding-top: 10px">
+                        <form action="{{ route('admin.courses.destroy',[$iten->id]) }}" method="post"
+                              style="float: left; padding-right: 5px">
+                            @csrf
+                            @method('DELETE')
+                            <button>DELETAR</button>
+                        </form>
+                        <form action="{{ route('admin.courses.edit',[$iten->id]) }}" method="post">
+                            @csrf
+                            @method('GET')
+                            <button>EDITAR</button>
+                        </form>
+                    </div>
+                    <hr>
                 </li>
             @endforeach
         </ul>
+        {{--<div>{{ $itens->links() }}</div>--}}
+    </div>
+@endif
+
+@if ($goToSection === 'show')
+    <div>
+
+        <h3>Cursos:</h3>
+        <ul>
+            <li>Id: {{ $record->id }}</li>
+            <li>Curso: {{ $record->name }}</li>
+            <li>Preço: {{ $record->price }}</li>
+            <li>Descrição: {{ $record->description }}</li>
+            <li>Publicar: {{ $record->status === 'y' ? 'sim' : 'não' }}</li>
+            <li>Imagem: {{ isset($record->image) ? $record->image : '[Sem imagem]' }}</li>
+        </ul>
+
+        <div style="padding: 10px 0 10px 0">
+            <form action="{{ route('admin.courses.destroy',[$record->id]) }}" method="post"
+                  style="float: left; padding-right: 5px">
+                @csrf
+                @method('DELETE')
+                <button>DELETAR</button>
+            </form>
+            <form action="{{ route('admin.courses.edit',[$record->id]) }}" method="post">
+                @csrf
+                @method('GET')
+                <button>EDITAR</button>
+            </form>
+        </div>
+
+        @if(isset($record->image))
+            <div>
+                <img width="80%" src="{{ asset($record->image) }}"/>
+            </div>
+        @endif
+
     </div>
 @endif
 </body>

@@ -11,9 +11,13 @@
 |
 */
 
-Route::get('/', ['as'=>'home', function () {
-    return view('welcome');
-}]);
+
+Route::get('/', [
+    'as' => 'root',
+    function () {
+        return view('welcome');
+    },
+]);
 
 Route::get('fooHelloWorld/{id?}', function ($id = null) {
     return isset($id) ? "Olá mundo! - id: " . $id : "Olá mundo!";
@@ -37,6 +41,7 @@ Route::post('fooPost', function () {
 //    dd($_POST);
     $res = isset($_POST['testPost']) ? "Olá POST! - testePost: " . $_POST['testPost'] : "Olá POST vazio!";
     $res .= isset($_POST['testPost2']) ? " - Olá POST! - testePost: " . $_POST['testPost2'] : " - Olá POST 2 vazio!";
+
     return $res;
 });
 
@@ -46,14 +51,15 @@ Route::post('fooControllerPost', ['uses' => 'TestController@fooPost']);
 
 Route::get('testView', function () {
     $firstArray = [
-      ['name' => 'Maria', 'email' => 'maria@mail.com'],
-      ['name' => 'João', 'email' => 'joao@mail.com']
+        ['name' => 'Maria', 'email' => 'maria@mail.com'],
+        ['name' => 'João', 'email' => 'joao@mail.com'],
     ];
 
     $secondArray = [
-      (object)['name' => 'Bakunin', 'email' => 'bakunin@mail.com'],
-      (object)['name' => 'Proudhon', 'email' => 'proudhon@mail.com']
+        (object)['name' => 'Bakunin', 'email' => 'bakunin@mail.com'],
+        (object)['name' => 'Proudhon', 'email' => 'proudhon@mail.com'],
     ];
+
     return view('testView', compact('firstArray', 'secondArray'));
 });
 
@@ -62,10 +68,67 @@ Route::get('testView', function () {
 Route::get('contatos/{id}', ['as' => 'contacts.show', 'uses' => 'ContactController@show']);
 Route::get('contatos', ['as' => 'contacts', 'uses' => 'ContactController@index']);
 
+Auth::routes();
 
-Route::get('adm/cursos', ['as' => 'admin.courses', 'uses' => 'CursoController@index']);
-Route::get('adm/cursos/novo', ['as' => 'admin.courses.new', 'uses' => 'CursoController@create']);
-Route::post('adm/cursos/grava', ['as' => 'admin.courses.store', 'uses' => 'CursoController@store']);
-Route::get('adm/cursos/editar/{id}', ['as' => 'admin.courses.edit', 'uses' => 'CursoController@edit']);
-Route::put('adm/cursos/atualizar/{id}', ['as' => 'admin.courses.update', 'uses' => 'CursoController@update']);
-Route::get('adm/cursos/deletar/{id}', ['as' => 'admin.courses.delete', 'uses' => 'CursoController@destroy']);
+// Criar função para definir pra cada lang instalada
+Route::resourceVerbs([
+    // Verbos da URL - foo/criar
+
+    // pt-br
+    'create' => 'criar',
+    'edit' => 'editar',
+]);
+
+// Criar função para gerar todos grupos e controles de uma array
+Route::name('admin.')->prefix('adm')->middleware('auth')->group(function () {
+    // Name is prefix in code - admin.xyz
+    // Prefix is prefix in URL - adm/xyz
+    // ->namespace('Admin') caso haja diretórios no Controller
+
+    Route::resource('cursos', 'CursoController')->names([
+        'index' => 'courses',
+        'create' => 'courses.create',
+        'store' => 'courses.store',
+        'show' => 'courses.show',
+        'edit' => 'courses.edit',
+        'update' => 'courses.update',
+        'destroy' => 'courses.destroy'
+    ]);
+
+});
+
+/*
+Route::resource('photos', 'PhotoController');
+// ou
+Route::resources([
+    'photos' => 'PhotoController',
+    'posts' => 'PostController'
+]);
+
+GET				/photos						index		photos.index
+GET				/photos/create				create	    photos.create
+POST			/photos						store		photos.store
+GET				/photos/{photo}				show		photos.show
+GET				/photos/{photo}/edit	    edit		photos.edit
+PUT/PATCH	    /photos/{photo}				update	    photos.update
+DELETE	    	/photos/{photo}				destroy	    photos.destroy
+*/
+
+
+
+
+Route::get('/home', 'HomeController@index')->name('home');
+
+// Proteger grupo de rotas com prefixo
+// Route::group(['prefix' => 'adm', 'middleware' => 'auth'], function () {
+Route::prefix('adm')->middleware('auth')->group(function () {
+    // Rotas protegidas
+    // Route::get('cursos/novo', ['as' => 'admin.courses.new', 'uses' => 'CursoController@create']);
+});
+
+// Proteger grupo de rotas sem prefixo
+Route::middleware(['auth'])->group(function () {
+    // Route::get('adm/cursos/novo', ['as' => 'admin.courses.new', 'uses' => 'CursoController@create']);
+});
+
+// Route::get('adm/cursos/novo', ['as' => 'admin.courses.new', 'uses' => 'CursoController@create'])->middleware('auth');

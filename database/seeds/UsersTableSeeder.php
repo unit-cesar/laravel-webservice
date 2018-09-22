@@ -19,8 +19,8 @@ class UsersTableSeeder extends Seeder
         // php artisan db:seed
 
         $data = [
-          'name' => 'Devesa',
-          'email' => 'devesa@mail.com',
+          'name' => 'Cesar',
+          'email' => 'cesar@mail.com',
           'password' => bcrypt('123456'),
         ];
 

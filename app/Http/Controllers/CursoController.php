@@ -15,10 +15,12 @@ class CursoController extends Controller
     public function index()
     {
         $goToSection = 'index';
-        $itens = Curso::all();
+        // $itens = Curso::all(); // Todos
+        $itens = Curso::paginate(3); // limit de 3; Em blade: {{ $itens->links() }}
+
 
         // return $itens;
-        return view('cursos', compact('itens'), compact('goToSection'));
+        return view('courses', compact('itens'), compact('goToSection'));
 
     }
 
@@ -31,7 +33,7 @@ class CursoController extends Controller
     {
         $goToSection = 'create';
 
-        return view('cursos', compact('goToSection'));
+        return view('courses', compact('goToSection'));
     }
 
     /**
@@ -78,7 +80,10 @@ class CursoController extends Controller
      */
     public function show(Curso $curso)
     {
-        //
+        $goToSection = 'show';
+        $record = Curso::find($curso->id);
+
+        return view('courses', compact('goToSection'), compact('record'));
     }
 
     /**
@@ -87,13 +92,13 @@ class CursoController extends Controller
      * @param  \App\Curso $curso
      * @return \Illuminate\Http\Response
      */
-    public function edit(Curso $curso, Request $request)
+    public function edit(Curso $curso)
     {
+        // dd($curso->id); // Nome do Controller
         $goToSection = 'edit';
-        $record = Curso::find($request['id']);
-        // dd($request['id']);
+        $record = Curso::find($curso->id);
 
-        return view('cursos', compact('goToSection'), compact('record'));
+        return view('courses', compact('goToSection'), compact('record'));
     }
 
     /**
@@ -126,7 +131,8 @@ class CursoController extends Controller
         }
 
         // dd($data);
-        Curso::find($request['id'])->update($data); // Id da rota, não enviado por input
+        // dd($curso->id); // Por segurança buscar pelo id originário($curso) e não o enviado($request)
+        Curso::find($curso->id)->update($data); // Id da rota, não enviado por input
 
         return redirect()->route('admin.courses'); // !Não precisa das vars $item e $goToSection, a rota é chamada
     }
@@ -137,9 +143,9 @@ class CursoController extends Controller
      * @param  \App\Curso $curso
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Curso $curso, Request $request)
+    public function destroy(Curso $curso)
     {
-        Curso::find($request['id'])->delete();
+        Curso::find($curso->id)->delete();
         return redirect()->route('admin.courses');
     }
 }

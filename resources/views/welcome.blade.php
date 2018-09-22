@@ -111,8 +111,17 @@
         <div style="padding-top: 50px">
             <a href="{{ route('admin.courses') }}">Rota interna: adm/curso as admin.courses</a>
         </div>
-    </div>
 
+        <div style="padding-top: 50px">
+            @guest
+                <p>User não autenticado!</p>
+            @else
+                <p>User <strong>{{ Auth::user()->name }}</strong> autenticado!</p>
+            @endguest
+        </div>
+
+
+    </div>
 </div>
 </body>
 </html>
