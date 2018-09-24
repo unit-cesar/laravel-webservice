@@ -14,7 +14,7 @@ class AddUniqueToEmailContactsTable extends Migration
     public function up()
     {
         Schema::table('contacts', function (Blueprint $table) {
-            $table->unique('email');
+            $table->unique('email', 'contacts_email_unique');
         });
     }
 
@@ -26,7 +26,7 @@ class AddUniqueToEmailContactsTable extends Migration
     public function down()
     {
         Schema::table('contacts', function (Blueprint $table) {
-            // Nothing to do
+            $table->dropUnique('contacts_email_unique');
         });
     }
 }
