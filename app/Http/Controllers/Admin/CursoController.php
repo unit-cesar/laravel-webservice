@@ -1,8 +1,9 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin;
 
 use App\Curso;
+use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
 class CursoController extends Controller
@@ -19,8 +20,8 @@ class CursoController extends Controller
         $itens = Curso::paginate(3); // limit de 3; Em blade: {{ $itens->links() }}
 
 
-        // return $itens;
-        return view('courses', compact('itens'), compact('goToSection'));
+        // view() -> 'admin' é um diretório >>> views/admin/courses.blade.php
+        return view('admin.courses', compact('itens'), compact('goToSection'));
 
     }
 
@@ -33,7 +34,7 @@ class CursoController extends Controller
     {
         $goToSection = 'create';
 
-        return view('courses', compact('goToSection'));
+        return view('admin.courses', compact('goToSection'));
     }
 
     /**
@@ -83,7 +84,7 @@ class CursoController extends Controller
         $goToSection = 'show';
         $record = Curso::find($curso->id);
 
-        return view('courses', compact('goToSection'), compact('record'));
+        return view('admin.courses', compact('goToSection'), compact('record'));
     }
 
     /**
@@ -98,7 +99,7 @@ class CursoController extends Controller
         $goToSection = 'edit';
         $record = Curso::find($curso->id);
 
-        return view('courses', compact('goToSection'), compact('record'));
+        return view('admin.courses', compact('goToSection'), compact('record'));
     }
 
     /**

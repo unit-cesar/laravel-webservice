@@ -142,6 +142,7 @@ class AuthServiceProvider extends ServiceProvider
  * -publica os de outros
  * -deleta os seus
  * -deleta os de outros
+ * -gerencia usuários(cria, lista, atualiza, deleta)
  * -gerencia ACL (papeis e permissões)
  *
  * */

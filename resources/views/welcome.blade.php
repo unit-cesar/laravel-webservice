@@ -120,6 +120,14 @@
             @endguest
         </div>
 
+        {{--<div style="padding-top: 50px">--}}
+            {{--@auth--}}
+                {{--<h1>Área Restrita</h1>--}}
+                {{--<p><a href="{{ route('admin') }}">Users</a></p>--}}
+                {{--<p><a href="{{ route('admin') }}">Roles</a></p>--}}
+            {{--@endauth--}}
+        {{--</div>--}}
+
 
     </div>
 </div>

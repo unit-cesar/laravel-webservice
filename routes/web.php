@@ -80,11 +80,12 @@ Route::resourceVerbs([
 ]);
 
 // Criar função para gerar todos grupos e controles de uma array
-Route::name('admin.')->prefix('adm')->middleware('auth')->group(function () {
-    // Name is prefix in code - admin.xyz
+Route::name('admin.')->prefix('adm')->middleware('auth')->namespace('Admin')->group(function () {
+    // Name is prefix in code - admin.xyz (route) >>> Criar diretório para manter o padrão em Views -> views/admin
     // Prefix is prefix in URL - adm/xyz
     // ->namespace('Admin') caso haja diretórios no Controller
 
+    // Folder views/courses.blade.php (in controller)
     Route::resource('cursos', 'CursoController')->names([
         'index' => 'courses',
         'create' => 'courses.create',
@@ -94,6 +95,8 @@ Route::name('admin.')->prefix('adm')->middleware('auth')->group(function () {
         'update' => 'courses.update',
         'destroy' => 'courses.destroy'
     ]);
+
+
 
 });
 
