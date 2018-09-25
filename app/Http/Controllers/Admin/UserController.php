@@ -15,7 +15,11 @@ class UserController extends Controller
      */
     public function index()
     {
-        //
+        $goToSection = 'index';
+        $itens = User::paginate(50); // limit de 3; Em blade: {{ $itens->links() }}
+
+        // view() -> 'admin' é um diretório >>> views/admin/users.blade.php
+        return view('admin.users', compact('itens'), compact('goToSection'));
     }
 
     /**

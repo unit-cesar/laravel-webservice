@@ -66,30 +66,27 @@
 
 @if ($goToSection === 'index')
     <div>
-        <h3>Lista de Cursos:</h3>
+        <h3>Lista de Permissões:</h3>
         <ul>
             @foreach($itens as $iten)
                 <li>
                     <ul>
                         <li>Id: {{ $iten->id }}</li>
-                        <li><a href="{{ route('admin.courses.show', $iten->id) }}">Curso: {{ $iten->name }}</a></li>
-                        <li>Preço: {{ $iten->price }}</li>
+                        <li>Permissão: <a href="{{ route('admin.permissions.show', $iten->id) }}">{{ $iten->name }}</a></li>
                         <li>Descrição: {{ $iten->description }}</li>
-                        <li>Publicar: {{ $iten->status === 'y' ? 'sim' : 'não' }}</li>
-                        <li>Imagem: {{ isset($iten->image) ? $iten->image : '[Sem imagem]' }}</li>
                     </ul>
 
                     <div style="padding-top: 10px">
-                        <form action="{{ route('admin.courses.destroy',[$iten->id]) }}" method="post"
+                        <form action="{{ route('admin.permissions.destroy',[$iten->id]) }}" method="post"
                               style="float: left; padding-right: 5px">
                             @csrf
                             @method('DELETE')
-                            <button>DELETAR</button>
+                            <button disabled>DELETAR</button>
                         </form>
-                        <form action="{{ route('admin.courses.edit',[$iten->id]) }}" method="post">
+                        <form action="{{ route('admin.permissions.edit',[$iten->id]) }}" method="post">
                             @csrf
                             @method('GET')
-                            <button>EDITAR</button>
+                            <button disabled>EDITAR</button>
                         </form>
                     </div>
                     <hr>

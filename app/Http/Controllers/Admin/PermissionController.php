@@ -15,7 +15,11 @@ class PermissionController extends Controller
      */
     public function index()
     {
-        //
+        $goToSection = 'index';
+        $itens = Permission::paginate(50); // limit de 3; Em blade: {{ $itens->links() }}
+
+        // view() -> 'admin' é um diretório >>> views/admin/permissions.blade.php
+        return view('admin.permissions', compact('itens'), compact('goToSection'));
     }
 
     /**

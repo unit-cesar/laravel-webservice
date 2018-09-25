@@ -116,17 +116,15 @@
             @guest
                 <p>User não autenticado!</p>
             @else
+                <h1>Área Restrita</h1>
                 <p>User <strong>{{ Auth::user()->name }}</strong> autenticado!</p>
+                <p><a href="{{ route('admin.') }}">Admin</a></p>
+                <p><a href="{{ route('admin.users') }}">Users</a></p>
+                <p><a href="{{ route('admin.roles') }}">Roles</a></p>
+                <p><a href="{{ route('admin.courses') }}">Cursos</a></p>
             @endguest
         </div>
 
-        {{--<div style="padding-top: 50px">--}}
-            {{--@auth--}}
-                {{--<h1>Área Restrita</h1>--}}
-                {{--<p><a href="{{ route('admin') }}">Users</a></p>--}}
-                {{--<p><a href="{{ route('admin') }}">Roles</a></p>--}}
-            {{--@endauth--}}
-        {{--</div>--}}
 
 
     </div>

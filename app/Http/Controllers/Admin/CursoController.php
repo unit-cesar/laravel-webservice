@@ -84,6 +84,7 @@ class CursoController extends Controller
         $goToSection = 'show';
         $record = Curso::find($curso->id);
 
+        // view() -> 'admin' é um diretório >>> views/admin/courses.blade.php
         return view('admin.courses', compact('goToSection'), compact('record'));
     }
 

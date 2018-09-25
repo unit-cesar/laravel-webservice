@@ -85,7 +85,12 @@ Route::name('admin.')->prefix('adm')->middleware('auth')->namespace('Admin')->gr
     // Prefix is prefix in URL - adm/xyz
     // ->namespace('Admin') caso haja diretórios no Controller
 
-    // Folder views/courses.blade.php (in controller)
+    // URL: adm/
+    Route::get('/', function () {
+        return view('admin.index');
+    });
+
+    // URL em português e codigo interno em inglês
     Route::resource('cursos', 'CursoController')->names([
         'index' => 'courses',
         'create' => 'courses.create',
@@ -96,7 +101,35 @@ Route::name('admin.')->prefix('adm')->middleware('auth')->namespace('Admin')->gr
         'destroy' => 'courses.destroy'
     ]);
 
+    Route::resource('usuario', 'UserController')->names([
+        'index' => 'users',
+        'create' => 'users.create',
+        'store' => 'users.store',
+        'show' => 'users.show',
+        'edit' => 'users.edit',
+        'update' => 'users.update',
+        'destroy' => 'users.destroy'
+    ]);
 
+    Route::resource('papeis', 'RoleController')->names([
+        'index' => 'roles',
+        'create' => 'roles.create',
+        'store' => 'roles.store',
+        'show' => 'roles.show',
+        'edit' => 'roles.edit',
+        'update' => 'roles.update',
+        'destroy' => 'roles.destroy'
+    ]);
+
+    Route::resource('permissoes', 'PermissionController')->names([
+        'index' => 'permissions',
+        'create' => 'permissions.create',
+        'store' => 'permissions.store',
+        'show' => 'permissions.show',
+        'edit' => 'permissions.edit',
+        'update' => 'permissions.update',
+        'destroy' => 'permissions.destroy'
+    ]);
 
 });
 
@@ -118,20 +151,18 @@ DELETE	    	/photos/{photo}				destroy	    photos.destroy
 */
 
 
-
-
 Route::get('/home', 'HomeController@index')->name('home');
 
 // Proteger grupo de rotas com prefixo
 // Route::group(['prefix' => 'adm', 'middleware' => 'auth'], function () {
-Route::prefix('adm')->middleware('auth')->group(function () {
-    // Rotas protegidas
-    // Route::get('cursos/novo', ['as' => 'admin.courses.new', 'uses' => 'CursoController@create']);
-});
+// Route::prefix('adm')->middleware('auth')->group(function () {
+//     // Rotas protegidas
+//     // Route::get('cursos/novo', ['as' => 'admin.courses.new', 'uses' => 'CursoController@create']);
+// });
 
 // Proteger grupo de rotas sem prefixo
-Route::middleware(['auth'])->group(function () {
-    // Route::get('adm/cursos/novo', ['as' => 'admin.courses.new', 'uses' => 'CursoController@create']);
-});
+// Route::middleware(['auth'])->group(function () {
+//     // Route::get('adm/cursos/novo', ['as' => 'admin.courses.new', 'uses' => 'CursoController@create']);
+// });
 
 // Route::get('adm/cursos/novo', ['as' => 'admin.courses.new', 'uses' => 'CursoController@create'])->middleware('auth');
