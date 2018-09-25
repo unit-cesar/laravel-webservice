@@ -31,10 +31,13 @@ class AuthServiceProvider extends ServiceProvider
 /*
  * ACL Map - Anarquico
  *
- * User 1 (Support)
+ * User1 (Support)
  * - Tudo para testes e manutenção
  *
- * User 2 ()
+ * PublicGuest
+ * -ver publicados
+ *
+ * User2 (Registered)
  * -Ver tudo
  * -Cria
  * -Edita os seus
@@ -49,14 +52,13 @@ class AuthServiceProvider extends ServiceProvider
 /*
  * ACL Map - Padrão
  *
- * SuperUsers
+ * SuperUser
  * -Tudo
  *
  * PublicGuest
  * -ver publicados
  *
- * Registered
- * -ver os publicados
+ * Registered(Group)
  *
  * Author
  * -ver os publicados
@@ -108,25 +110,18 @@ class AuthServiceProvider extends ServiceProvider
 /*
  * ACL Map - Neste projeto
  *
- * SuperUsers
+ * SuperUser
  * -Tudo
  *
  * PublicGuest
  * -ver publicados
  *
- * Registered
- * -ver os publicados
+ * Registered(Group)
  *
  * Author
  * -ver os publicados
  * -cria
  *
- * Editor
- * -ver os publicados
- * -cria
- * -edita os seus
- * -edita os de outros
- * -publica os seus
  *
  * Publisher
  * -ver os publicados
@@ -135,6 +130,8 @@ class AuthServiceProvider extends ServiceProvider
  * -edita os de outros
  * -publica os seus
  * -publica os de outros
+ * -deleta os seus
+ * -deleta os de outros
  *
  * Manager
  * -ver os publicados
@@ -145,6 +142,6 @@ class AuthServiceProvider extends ServiceProvider
  * -publica os de outros
  * -deleta os seus
  * -deleta os de outros
- * //-gerencia usuários(cria, deleta, edita)
+ * -gerencia ACL (papeis e permissões)
  *
  * */
