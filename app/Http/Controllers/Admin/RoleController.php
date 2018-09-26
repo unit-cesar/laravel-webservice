@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Permission;
 use App\Role;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
@@ -85,8 +86,9 @@ class RoleController extends Controller
     {
         $goToSection = 'edit';
         $record = Role::find($id);
+        $recordPerms = Permission::get();
 
-        return view('admin.roles', compact('goToSection'), compact('record'));
+        return view('admin.roles', compact('goToSection', 'record', 'recordPerms'));
     }
 
     /**
@@ -101,22 +103,38 @@ class RoleController extends Controller
         $data = $request->all();
         // dd($data);
 
-        // Verifica se o nome não é igual ao de outro papel
-        $roleCheck = Role::where('name', '=', $data['name'])->first();
-
-        if (isset($roleCheck) && ($roleCheck->id != $id)) {
-            $messageError = 'Já existe um papel com o nome: ' . $data['name'];
-            return $messageError;
-        }
-
         // Verifica se não é o SuperAdmin
         if ($id == 1) {
             $messageError = 'Este papel não pode ser alterado!';
             return $messageError;
         }
 
+
+        if (!isset($role->id)) {
+            $role = Role::find($id);
+        }
+
+        if (isset($data['perm'])) {
+            // dd($data['role']);
+            $this->addPerm($data['perm'], $role);
+            return redirect()->back();
+        }
+
+        if (isset($data['removePerm'])) {
+            $this->removePerm($data['removePerm'], $role);
+            return redirect()->back();
+        }
+
+
+        // Verifica se o nome não é igual ao de outro papel
+        $roleCheck = Role::where('name', '=', $data['name'])->first();
+        if (isset($roleCheck) && ($roleCheck->id != $id)) {
+            $messageError = 'Já existe um papel com o nome: ' . $data['name'];
+            return $messageError;
+        }
+
         // dd($curso->id); // Por segurança buscar pelo id originário($curso) e não o enviado($request)
-        Role::find($id)->update($data);
+        $role->update($data);
 
         // return redirect()->back();
         return redirect()->route('admin.roles'); // !Não precisa das vars $item e $goToSection, a rota é chamada
@@ -138,5 +156,51 @@ class RoleController extends Controller
 
         Role::find($id)->delete();
         return redirect()->route('admin.roles');
+    }
+
+
+    /**
+     * Add role permissions
+     *
+     */
+    private function addPerm($perm, $role)
+    {
+
+        if (is_string($perm)) {
+            $perm = Permission::where('id', '=', $perm)->firstOrFail();
+        }
+
+        if ($this->checkPerm($perm, $role)) {
+            return;
+        }
+
+        // roles() -> é um metodo do Model User
+        return $role->permissions()->attach($perm);
+    }
+
+    /**
+     * Check if permission is already role's
+     *
+     */
+    private function checkPerm($perm, $role)
+    {
+
+        // roles() -> é um metodo do Model User
+        return (boolean)$role->permissions()->find($perm->id);
+
+    }
+
+    /**
+     * Remove role permission
+     *
+     */
+    private function removePerm($perm, $role)
+    {
+        if (is_string($perm)) {
+            $perm = Permission::where('id', '=', $perm)->firstOrFail();
+        }
+
+        // roles() -> é um metodo do Model User
+        return $role->permissions()->detach($perm);
     }
 }
