@@ -1,3 +1,6 @@
+<p style="position: sticky; top: 1px; padding: 5px; background-color: #cae8ca; border: 2px solid #4CAF50;">
+    User <strong>{{ Auth::user()->name }}</strong> autenticado!
+</p>
 <ul>
     <li>
         <a href="{{ route('root') }}">HOME > Site</a>
@@ -13,11 +16,21 @@
     <li>
         <a href="{{ route('admin.users') }}">USUÁRIOS</a>
     </li>
+</ul>
+<ul>
     <li>
-        <a href="{{ route('admin.roles') }}">ROLES</a>
+        <a href="{{ route('admin.roles') }}">PAPEIS</a>
     </li>
     <li>
-        <a href="{{ route('admin.permissions') }}">PERMISSIONS</a>
+        <a href="{{ route('admin.roles.create') }}">CADASTRAR NOVO PAPEL</a>
+    </li>
+</ul>
+<ul>
+    <li>
+        <a href="{{ route('admin.permissions') }}">PERMISSÕES</a>
+    </li>
+    <li>
+        <a href="{{ route('admin.permissions.create') }}">CADASTRAR NOVA PERMISSÃO</a>
     </li>
 </ul>
 

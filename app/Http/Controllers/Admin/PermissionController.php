@@ -29,7 +29,9 @@ class PermissionController extends Controller
      */
     public function create()
     {
-        //
+        $goToSection = 'create';
+
+        return view('admin.permissions', compact('goToSection'));
     }
 
     /**
@@ -49,9 +51,14 @@ class PermissionController extends Controller
      * @param  \App\Permission  $permission
      * @return \Illuminate\Http\Response
      */
-    public function show(Permission $permission)
+    public function show(Permission $permission, $id)
     {
-        //
+        // dd($role); // como a rota tem nome diferente do controller, essa função não funciona
+        $goToSection = 'show';
+        $record = Permission::find($id);
+
+        // view() -> 'admin' é um diretório >>> views/admin/courses.blade.php
+        return view('admin.permissions', compact('goToSection'), compact('record'));
     }
 
     /**
@@ -60,7 +67,7 @@ class PermissionController extends Controller
      * @param  \App\Permission  $permission
      * @return \Illuminate\Http\Response
      */
-    public function edit(Permission $permission)
+    public function edit(Permission $permission, $id)
     {
         //
     }

@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Controllers\Controller;
 use App\Role;
+use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
 class RoleController extends Controller
@@ -29,7 +29,9 @@ class RoleController extends Controller
      */
     public function create()
     {
-        //
+        $goToSection = 'create';
+
+        return view('admin.roles', compact('goToSection'));
     }
 
     /**
@@ -40,7 +42,14 @@ class RoleController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        // dd($request->all());
+        // dd($request['name'])
+
+        $data = $request->all();
+        // dd($data);
+        Role::create($data);
+
+        return redirect()->route('admin.roles'); // !Não precisa das vars $item e $goToSection, a rota é chamada
     }
 
     /**
@@ -49,9 +58,14 @@ class RoleController extends Controller
      * @param  \App\Role  $role
      * @return \Illuminate\Http\Response
      */
-    public function show(Role $role)
+    public function show(Role $role, $id)
     {
-        //
+        // dd($role); // como a rota tem nome diferente do controller, essa função não funciona
+        $goToSection = 'show';
+        $record = Role::find($id);
+
+        // view() -> 'admin' é um diretório >>> views/admin/courses.blade.php
+        return view('admin.roles', compact('goToSection'), compact('record'));
     }
 
     /**
@@ -60,9 +74,12 @@ class RoleController extends Controller
      * @param  \App\Role  $role
      * @return \Illuminate\Http\Response
      */
-    public function edit(Role $role)
+    public function edit(Role $role, $id)
     {
-        //
+        $goToSection = 'edit';
+        $record = Role::find($id);
+
+        return view('admin.roles', compact('goToSection'), compact('record'));
     }
 
     /**
@@ -72,9 +89,16 @@ class RoleController extends Controller
      * @param  \App\Role  $role
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Role $role)
+    public function update(Request $request, Role $role, $id)
     {
-        //
+        $data = $request->all();
+        // dd($data);
+
+        // dd($curso->id); // Por segurança buscar pelo id originário($curso) e não o enviado($request)
+        Role::find($id)->update($data);
+
+        // return redirect()->back();
+        return redirect()->route('admin.roles'); // !Não precisa das vars $item e $goToSection, a rota é chamada
     }
 
     /**
@@ -83,8 +107,9 @@ class RoleController extends Controller
      * @param  \App\Role  $role
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Role $role)
+    public function destroy(Role $role, $id)
     {
-        //
+        Role::find($id)->delete();
+        return redirect()->route('admin.roles');
     }
 }

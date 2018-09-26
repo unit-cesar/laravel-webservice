@@ -29,7 +29,9 @@ class UserController extends Controller
      */
     public function create()
     {
-        //
+        $goToSection = 'create';
+
+        return view('admin.users', compact('goToSection'));
     }
 
     /**
@@ -49,9 +51,14 @@ class UserController extends Controller
      * @param  \App\User  $user
      * @return \Illuminate\Http\Response
      */
-    public function show(User $user)
+    public function show(User $user, $id)
     {
-        //
+        // dd($role); // como a rota tem nome diferente do controller, essa função não funciona
+        $goToSection = 'show';
+        $record = User::find($id);
+
+        // view() -> 'admin' é um diretório >>> views/admin/courses.blade.php
+        return view('admin.users', compact('goToSection'), compact('record'));
     }
 
     /**
@@ -60,9 +67,13 @@ class UserController extends Controller
      * @param  \App\User  $user
      * @return \Illuminate\Http\Response
      */
-    public function edit(User $user)
+    public function edit(User $user, $id)
     {
-        //
+        // dd($user); // como a rota tem nome diferente do controller, essa função não funciona
+        $goToSection = 'edit';
+        $record = User::find($id);
+
+        return view('admin.users', compact('goToSection'), compact('record'));
     }
 
     /**
@@ -72,9 +83,16 @@ class UserController extends Controller
      * @param  \App\User  $user
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, User $user)
+    public function update(Request $request, User $user, $id)
     {
-        //
+        $data = $request->all();
+        // dd($data);
+
+        // dd($curso->id); // Por segurança buscar pelo id originário($curso) e não o enviado($request)
+        User::find($id)->update($data);
+
+        // return redirect()->back();
+        return redirect()->route('admin.users'); // !Não precisa das vars $item e $goToSection, a rota é chamada
     }
 
     /**
@@ -83,8 +101,9 @@ class UserController extends Controller
      * @param  \App\User  $user
      * @return \Illuminate\Http\Response
      */
-    public function destroy(User $user)
+    public function destroy(User $user, $id)
     {
-        //
+        User::find($id)->delete();
+        return redirect()->route('admin.users');
     }
 }

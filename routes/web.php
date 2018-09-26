@@ -101,7 +101,7 @@ Route::name('admin.')->prefix('adm')->middleware('auth')->namespace('Admin')->gr
         'destroy' => 'courses.destroy'
     ]);
 
-    Route::resource('usuario', 'UserController')->names([
+    Route::resource('usuarios', 'UserController')->names([
         'index' => 'users',
         'create' => 'users.create',
         'store' => 'users.store',

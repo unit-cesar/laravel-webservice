@@ -96,7 +96,7 @@ class CursoController extends Controller
      */
     public function edit(Curso $curso)
     {
-        // dd($curso->id); // Nome do Controller
+        // dd($curso); // Nome do Controller
         $goToSection = 'edit';
         $record = Curso::find($curso->id);
 
@@ -136,6 +136,7 @@ class CursoController extends Controller
         // dd($curso->id); // Por segurança buscar pelo id originário($curso) e não o enviado($request)
         Curso::find($curso->id)->update($data); // Id da rota, não enviado por input
 
+        // return redirect()->back();
         return redirect()->route('admin.courses'); // !Não precisa das vars $item e $goToSection, a rota é chamada
     }
 

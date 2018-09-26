@@ -72,7 +72,7 @@
                 <li>
                     <ul>
                         <li>Id: {{ $iten->id }}</li>
-                        <li><a href="{{ route('admin.courses.show', $iten->id) }}">Curso: {{ $iten->name }}</a></li>
+                        <li>Curso: <a href="{{ route('admin.courses.show', $iten->id) }}">{{ $iten->name }}</a></li>
                         <li>Preço: {{ $iten->price }}</li>
                         <li>Descrição: {{ $iten->description }}</li>
                         <li>Publicar: {{ $iten->status === 'y' ? 'sim' : 'não' }}</li>
