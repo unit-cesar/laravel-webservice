@@ -135,6 +135,7 @@ class CursoController extends Controller
         // dd($data);
         // dd($curso->id); // Por segurança buscar pelo id originário($curso) e não o enviado($request)
         Curso::find($curso->id)->update($data); // Id da rota, não enviado por input
+        // $curso->update($data);
 
         // return redirect()->back();
         return redirect()->route('admin.courses'); // !Não precisa das vars $item e $goToSection, a rota é chamada

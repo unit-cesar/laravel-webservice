@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Cursos</title>
+    <title>Papeis</title>
 </head>
 <body>
 

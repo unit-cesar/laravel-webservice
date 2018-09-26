@@ -33,13 +33,49 @@
                 <br>
                 <input type="text" placeholder="Email" name="email"
                        value="{{ isset($record->email) ? $record->email : '' }}">
-
                 <br>
                 {{--Altera form pra PUT--}}
                 {{--<input type="hidden" name="_method" value="put">--}}
                 @method('PUT')
                 <button>Atualizar usuário</button>
             </form>
+
+            <div style="padding-top: 15px">
+                <form action="{{ route('admin.users.update',[$record->id]) }}" method="post"
+                      style="float: left; padding-right: 5px">
+                    <label for="role">Adicionar Papel: </label>
+                    <select id="role" name="role">
+                        @foreach($recordRoles as $recordRole)
+                            <option value="{{ $recordRole->id }}">{{ $recordRole->name }}</option>
+                        @endforeach
+                    </select>
+                    @csrf
+                    @method('PUT')
+                    <input type="hidden" name="addRole">
+                    <button>ADICIONAR PAPEL</button>
+                </form>
+            </div>
+
+            <div style="padding-top: 50px">
+                <h3>Papeis atribuidos ao usuários: {{ $record->name }}</h3>
+                @if (count($record->roles)>0)
+                    @foreach($record->roles as $role)
+                        <div>
+                            <form action="{{ route('admin.users.update',[$record->id]) }}" method="post">
+                                <p style="clear: both; float: left; padding-right: 5px">{{ $role->name }}</p>
+                                @csrf
+                                @method('PUT')
+                                <input type="hidden" name="removeRole" value="{{ $role->id }}">
+                                <button style="margin-top: 15px">REMOVER PAPEL</button>
+                            </form>
+                        </div>
+                        <br>
+                    @endforeach
+                @else
+                    <p>Usuário sem papel definido!</p>
+                @endif
+            </div>
+
         @else
             <p>Registro não encontrado!</p>
         @endif
@@ -57,7 +93,14 @@
                         <li>Id: {{ $iten->id }}</li>
                         <li><a href="{{ route('admin.users.show', $iten->id) }}">{{ $iten->name }}</a></li>
                         <li>Email: {{ $iten->email }}</li>
-                        <li>Papel: ??? {{--{{ $record->email }}--}}</li>
+                        @if (count($iten->roles)>0)
+                            <li>Papeis:</li>
+                            <ul>
+                                @foreach($iten->roles as $role)
+                                    <li>{{ $role->name }}</li>
+                                @endforeach
+                            </ul>
+                        @endif
                     </ul>
 
                     <div style="padding-top: 10px">
@@ -89,7 +132,18 @@
             <li>Id: {{ $record->id }}</li>
             <li>Usuário: {{ $record->name }}</li>
             <li>Email: {{ $record->email }}</li>
-            <li>Papel: ??? {{--{{ $record->email }}--}}</li>
+
+            @if (count($record->roles)>0)
+                <li>Papeis:</li>
+                <ul>
+                    @foreach($record->roles as $role)
+                        <li>{{ $role->name }}</li>
+                    @endforeach
+                </ul>
+            @else
+                <p>Usuário sem papel definido!</p>
+            @endif
+
         </ul>
 
         <div style="padding: 10px 0 10px 0">

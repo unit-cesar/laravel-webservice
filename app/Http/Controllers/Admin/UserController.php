@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Role;
 use App\User;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -37,7 +38,7 @@ class UserController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
@@ -48,7 +49,7 @@ class UserController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\User  $user
+     * @param  \App\User $user
      * @return \Illuminate\Http\Response
      */
     public function show(User $user, $id)
@@ -64,7 +65,7 @@ class UserController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\User  $user
+     * @param  \App\User $user
      * @return \Illuminate\Http\Response
      */
     public function edit(User $user, $id)
@@ -72,15 +73,18 @@ class UserController extends Controller
         // dd($user); // como a rota tem nome diferente do controller, essa função não funciona
         $goToSection = 'edit';
         $record = User::find($id);
+        $recordRoles = Role::get();
+        // dd($recordRoles);
+        // dd($record->roles);
 
-        return view('admin.users', compact('goToSection'), compact('record'));
+        return view('admin.users', compact('goToSection', 'record', 'recordRoles'));
     }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\User  $user
+     * @param  \Illuminate\Http\Request $request
+     * @param  \App\User $user
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, User $user, $id)
@@ -88,22 +92,84 @@ class UserController extends Controller
         $data = $request->all();
         // dd($data);
 
-        // dd($curso->id); // Por segurança buscar pelo id originário($curso) e não o enviado($request)
-        User::find($id)->update($data);
+        if (!isset($user->id)) {
+            $user = User::find($id);
+        }
 
-        // return redirect()->back();
+        if (isset($data['role'])) {
+            // dd($data['role']);
+            $this->addRole($data['role'], $user);
+            return redirect()->back();
+        }
+
+        if (isset($data['removeRole'])) {
+            $this->removeRole($data['removeRole'], $user);
+            return redirect()->back();
+        }
+
+        // dd($data);
+        $user->update($data);
         return redirect()->route('admin.users'); // !Não precisa das vars $item e $goToSection, a rota é chamada
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\User  $user
+     * @param  \App\User $user
      * @return \Illuminate\Http\Response
      */
     public function destroy(User $user, $id)
     {
         User::find($id)->delete();
         return redirect()->route('admin.users');
+    }
+
+
+    /**
+     * Add user role
+     *
+     */
+    private function addRole($role, $user)
+    {
+
+        if (is_string($role)) {
+            $role = Role::where('id', '=', $role)->firstOrFail();
+        }
+
+        if ($this->checkRole($role, $user)) {
+            return;
+        }
+
+        // roles() -> é um metodo do Model User
+        return $user->roles()->attach($role);
+    }
+
+    /**
+     * Check if role is already user's
+     *
+     */
+    private function checkRole($role, $user)
+    {
+        // if (is_string($role)) {
+        //     $role = Role::where('id','=',$role)->firstOrFail();
+        // }
+
+        // roles() -> é um metodo do Model User
+        return (boolean)$user->roles()->find($role->id);
+
+    }
+
+    /**
+     * Remove user role
+     *
+     */
+    private function removeRole($role, $user)
+    {
+        if (is_string($role)) {
+            $role = Role::where('id', '=', $role)->firstOrFail();
+        }
+
+        // roles() -> é um metodo do Model User
+        return $user->roles()->detach($role);
     }
 }
