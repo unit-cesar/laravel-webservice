@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Permission;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 
 class PermissionController extends Controller
 {
@@ -15,6 +16,9 @@ class PermissionController extends Controller
      */
     public function index()
     {
+        // ACL
+        abort_if(Gate::denies('permission-view'), 403);
+
         $goToSection = 'index';
         $itens = Permission::paginate(50); // limit de 3; Em blade: {{ $itens->links() }}
 
@@ -29,6 +33,9 @@ class PermissionController extends Controller
      */
     public function create()
     {
+        // ACL
+        abort_if(Gate::denies('permission-create'), 403);
+
         $goToSection = 'create';
 
         return view('admin.permissions', compact('goToSection'));
@@ -42,6 +49,9 @@ class PermissionController extends Controller
      */
     public function store(Request $request)
     {
+        // ACL
+        abort_if(Gate::denies('permission-create'), 403);
+
         // dd($request->all());
         // dd($request['name'])
 
@@ -67,6 +77,9 @@ class PermissionController extends Controller
      */
     public function show(Permission $permission, $id)
     {
+        // ACL
+        abort_if(Gate::denies('permission-view'), 403);
+
         // Se a rota tiver nome diferente do Controller
         if (!isset($permission->id)) {
             $permission = Permission::find($id);
@@ -87,6 +100,9 @@ class PermissionController extends Controller
      */
     public function edit(Permission $permission, $id)
     {
+        // ACL
+        abort_if(Gate::denies('permission-update'), 403);
+
         // Se a rota tiver nome diferente do Controller
         if (!isset($permission->id)) {
             $permission = Permission::find($id);
@@ -107,6 +123,9 @@ class PermissionController extends Controller
      */
     public function update(Request $request, Permission $permission, $id)
     {
+        // ACL
+        abort_if(Gate::denies('permission-update'), 403);
+
         $data = $request->all();
         // dd($data);
 
@@ -137,6 +156,9 @@ class PermissionController extends Controller
      */
     public function destroy(Permission $permission, $id)
     {
+        // ACL
+        abort_if(Gate::denies('permission-delete'), 403);
+
         Permission::find($id)->delete();
         return redirect()->route('admin.permissions');
     }

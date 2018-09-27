@@ -6,6 +6,7 @@ use App\Role;
 use App\User;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Gate;
 
 class UserController extends Controller
 {
@@ -16,6 +17,13 @@ class UserController extends Controller
      */
     public function index()
     {
+        // ACL
+        abort_if(Gate::denies('user-view'), 403);
+
+        // if(Gate::denies('user-view')){
+        //     abort(403, 'Não autorizado!');
+        // }
+
         $goToSection = 'index';
         $itens = User::paginate(50); // limit de 3; Em blade: {{ $itens->links() }}
 
@@ -30,6 +38,9 @@ class UserController extends Controller
      */
     public function create()
     {
+        // ACL
+        abort_if(Gate::denies('user-create'), 403);
+
         $goToSection = 'create';
 
         return view('admin.users', compact('goToSection'));
@@ -43,7 +54,8 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        // ACL
+        abort_if(Gate::denies('user-create'), 403);
     }
 
     /**
@@ -54,6 +66,9 @@ class UserController extends Controller
      */
     public function show(User $user, $id)
     {
+        // ACL
+        abort_if(Gate::denies('user-view'), 403);
+
         // dd($role); // como a rota tem nome diferente do controller, essa função não funciona
         $goToSection = 'show';
         $record = User::find($id);
@@ -70,6 +85,9 @@ class UserController extends Controller
      */
     public function edit(User $user, $id)
     {
+        // ACL
+        abort_if(Gate::denies('user-update'), 403);
+
         // dd($user); // como a rota tem nome diferente do controller, essa função não funciona
         $goToSection = 'edit';
         $record = User::find($id);
@@ -89,6 +107,9 @@ class UserController extends Controller
      */
     public function update(Request $request, User $user, $id)
     {
+        // ACL
+        abort_if(Gate::denies('user-update'), 403);
+
         $data = $request->all();
         // dd($data);
 
@@ -121,6 +142,9 @@ class UserController extends Controller
      */
     public function destroy(User $user, $id)
     {
+        // ACL
+        abort_if(Gate::denies('user-delete'), 403);
+
         User::find($id)->delete();
         return redirect()->route('admin.users');
     }

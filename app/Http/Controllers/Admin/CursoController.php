@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Curso;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 
 class CursoController extends Controller
 {
@@ -15,6 +16,9 @@ class CursoController extends Controller
      */
     public function index()
     {
+        // ACL
+        abort_if(Gate::denies('curso-view'), 403);
+
         $goToSection = 'index';
         // $itens = Curso::all(); // Todos
         $itens = Curso::paginate(3); // limit de 3; Em blade: {{ $itens->links() }}
@@ -32,6 +36,9 @@ class CursoController extends Controller
      */
     public function create()
     {
+        // ACL
+        abort_if(Gate::denies('curso-create'), 403);
+
         $goToSection = 'create';
 
         return view('admin.courses', compact('goToSection'));
@@ -45,6 +52,9 @@ class CursoController extends Controller
      */
     public function store(Request $request)
     {
+        // ACL
+        abort_if(Gate::denies('curso-create'), 403);
+
         // dd($request->all());
         // dd($request['name'])
 
@@ -81,6 +91,9 @@ class CursoController extends Controller
      */
     public function show(Curso $curso)
     {
+        // ACL
+        abort_if(Gate::denies('curso-view'), 403);
+
         $goToSection = 'show';
         $record = Curso::find($curso->id);
 
@@ -96,6 +109,9 @@ class CursoController extends Controller
      */
     public function edit(Curso $curso)
     {
+        // ACL
+        abort_if(Gate::denies('curso-update'), 403);
+
         // dd($curso); // Nome do Controller
         $goToSection = 'edit';
         $record = Curso::find($curso->id);
@@ -112,6 +128,8 @@ class CursoController extends Controller
      */
     public function update(Request $request, Curso $curso)
     {
+        // ACL
+        abort_if(Gate::denies('curso-update'), 403);
 
         $data = $request->all();
         $dir = 'img/cursos/';
@@ -149,6 +167,9 @@ class CursoController extends Controller
      */
     public function destroy(Curso $curso)
     {
+        // ACL
+        abort_if(Gate::denies('curso-delete'), 403);
+
         Curso::find($curso->id)->delete();
         return redirect()->route('admin.courses');
     }

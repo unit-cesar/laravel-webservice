@@ -6,6 +6,7 @@ use App\Permission;
 use App\Role;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 
 class RoleController extends Controller
 {
@@ -16,6 +17,9 @@ class RoleController extends Controller
      */
     public function index()
     {
+        // ACL
+        abort_if(Gate::denies('role-view'), 403);
+
         $goToSection = 'index';
         $itens = Role::paginate(50); // limit de 3; Em blade: {{ $itens->links() }}
 
@@ -30,6 +34,9 @@ class RoleController extends Controller
      */
     public function create()
     {
+        // ACL
+        abort_if(Gate::denies('role-create'), 403);
+
         $goToSection = 'create';
 
         return view('admin.roles', compact('goToSection'));
@@ -43,6 +50,9 @@ class RoleController extends Controller
      */
     public function store(Request $request)
     {
+        // ACL
+        abort_if(Gate::denies('role-create'), 403);
+
         // dd($request->all());
         // dd($request['name'])
 
@@ -68,6 +78,9 @@ class RoleController extends Controller
      */
     public function show(Role $role, $id)
     {
+        // ACL
+        abort_if(Gate::denies('role-view'), 403);
+
         // Se a rota tiver nome diferente do Controller
         if (!isset($role->id)) {
             $role = Role::find($id);
@@ -88,6 +101,9 @@ class RoleController extends Controller
      */
     public function edit(Role $role, $id)
     {
+        // ACL
+        abort_if(Gate::denies('role-update'), 403);
+
         // Se a rota tiver nome diferente do Controller
         if (!isset($role->id)) {
             $role = Role::find($id);
@@ -109,6 +125,9 @@ class RoleController extends Controller
      */
     public function update(Request $request, Role $role, $id)
     {
+        // ACL
+        abort_if(Gate::denies('role-update'), 403);
+
         $data = $request->all();
         // dd($data);
 
@@ -157,6 +176,9 @@ class RoleController extends Controller
      */
     public function destroy(Role $role, $id)
     {
+        // ACL
+        abort_if(Gate::denies('role-delete'), 403);
+
         // Verifica se não é o SuperAdmin
         if ($id == 1) {
             $messageError = 'Este papel não pode ser apagado!';
