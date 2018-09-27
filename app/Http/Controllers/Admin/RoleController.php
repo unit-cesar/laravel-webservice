@@ -104,6 +104,8 @@ class RoleController extends Controller
         // ACL
         abort_if(Gate::denies('role-update'), 403);
 
+        $this->protectedRoles($id);
+
         // Se a rota tiver nome diferente do Controller
         if (!isset($role->id)) {
             $role = Role::find($id);
@@ -128,14 +130,10 @@ class RoleController extends Controller
         // ACL
         abort_if(Gate::denies('role-update'), 403);
 
+        $this->protectedRoles($id);
+
         $data = $request->all();
         // dd($data);
-
-        // Verifica se não é o SuperAdmin
-        if ($id == 1) {
-            $messageError = 'Este papel não pode ser alterado!';
-            return $messageError;
-        }
 
         // Se a rota tiver nome diferente do Controller
         if (!isset($role->id)) {
@@ -179,14 +177,20 @@ class RoleController extends Controller
         // ACL
         abort_if(Gate::denies('role-delete'), 403);
 
-        // Verifica se não é o SuperAdmin
-        if ($id == 1) {
-            $messageError = 'Este papel não pode ser apagado!';
-            return $messageError;
-        }
+        $this->protectedRoles($id);
 
         Role::find($id)->delete();
         return redirect()->route('admin.roles');
     }
 
+    /**
+     * Check if role is a SuperUser or Registered
+     *
+     * @return boolean
+     */
+    private function protectedRoles($id)
+    {
+        // Verifica se não é o SuperAdmin ou Registered
+        abort_if(($id == 1) || ($id == 2), 403, 'Este papel não pode ser alterado!');
+    }
 }

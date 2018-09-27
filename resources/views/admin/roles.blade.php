@@ -103,8 +103,8 @@
                         @endif
                     </ul>
 
-                    @if (!$loop->first)
-                        {{--Mesmo que acesse pela URL, até mesmo sendo o SuperAdmin, é bloqueado alterar 'id==1' pelo controller--}}
+                    @if ($iten->id != 1 && $iten->id != 2)
+                        {{--Mesmo que acesse pela URL, até mesmo sendo o SuperAdmin, é bloqueado alterar IDs 1 e 2 pelo controller--}}
                         <div style="padding-top: 10px">
                             <form action="{{ route('admin.roles.destroy',[$iten->id]) }}" method="post"
                                   style="float: left; padding-right: 5px">
@@ -136,8 +136,8 @@
             <li>Curso: {{ $record->name }}</li>
             <li>Descrição: {{ $record->description }}</li>
         </ul>
-        @if ($record->id != 1)
-            {{--Mesmo que acesse pela URL, até mesmo sendo o SuperAdmin, é bloqueado alterar 'id==1' pelo controller--}}
+        @if ($record->id != 1 && $record->id != 2)
+            {{--Mesmo que acesse pela URL, até mesmo sendo o SuperAdmin, é bloqueado alterar IDs 1 e 2 pelo controller--}}
             <div style="padding: 10px 0 10px 0">
                 <form action="{{ route('admin.roles.destroy',[$record->id]) }}" method="post"
                       style="float: left; padding-right: 5px">

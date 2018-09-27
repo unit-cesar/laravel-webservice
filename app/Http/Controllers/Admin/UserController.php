@@ -125,9 +125,14 @@ class UserController extends Controller
         }
 
         if (isset($data['removeRole'])) {
+
+            // Verifica se não é role 'SuperAdmin' do user com 'id==1'
+            abort_if(($data['removeRole'] == 1) && ($user->id == 1), 403, 'Este papel não pode ser removido para este usuário!');
+
             $user->removeRole($data['removeRole']);
             return redirect()->back();
         }
+
 
         // dd($data);
         $user->update($data);
@@ -145,8 +150,27 @@ class UserController extends Controller
         // ACL
         abort_if(Gate::denies('user-delete'), 403);
 
+        $this->protectedUsers($id);
+
         User::find($id)->delete();
         return redirect()->route('admin.users');
     }
 
+    /**
+     * Check if user is a SuperUser
+     *
+     * @return boolean
+     */
+    private function protectedUsers($id)
+    {
+        // SuperUser
+        $user = User::find($id);
+        $roleObj = collect([]);
+        foreach ($user->roles as $role) {
+            $roleObj->push($role->name);
+        }
+        // dd($roleObj->intersect(['SuperUser'])->count());
+        abort_if($roleObj->intersect(['SuperUser'])->count() > 0, 403,
+            'Usuário "SuperUser" não pode ser apagado! Tente remover o papel "SuperUser".');
+    }
 }
