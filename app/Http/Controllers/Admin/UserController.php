@@ -20,7 +20,7 @@ class UserController extends Controller
         $itens = User::paginate(50); // limit de 3; Em blade: {{ $itens->links() }}
 
         // view() -> 'admin' é um diretório >>> views/admin/users.blade.php
-        return view('admin.users', compact('itens'), compact('goToSection'));
+        return view('admin.users', compact('itens', 'goToSection'));
     }
 
     /**
@@ -59,7 +59,7 @@ class UserController extends Controller
         $record = User::find($id);
 
         // view() -> 'admin' é um diretório >>> views/admin/courses.blade.php
-        return view('admin.users', compact('goToSection'), compact('record'));
+        return view('admin.users', compact('goToSection', 'record'));
     }
 
     /**
@@ -92,6 +92,7 @@ class UserController extends Controller
         $data = $request->all();
         // dd($data);
 
+        // Se a rota tiver nome diferente do Controller
         if (!isset($user->id)) {
             $user = User::find($id);
         }
@@ -126,7 +127,7 @@ class UserController extends Controller
 
 
     /**
-     * Add user role
+     * Removes relationship between user and role
      *
      */
     private function addRole($role, $user)
@@ -145,13 +146,13 @@ class UserController extends Controller
     }
 
     /**
-     * Check if role is already user's
+     * Check if role already has relationship to user
      *
      */
     private function checkRole($role, $user)
     {
         // if (is_string($role)) {
-        //     $role = Role::where('id','=',$role)->firstOrFail();
+        //     $role = Role::where('id', '=', $role)->firstOrFail();
         // }
 
         // roles() -> é um metodo do Model User
@@ -160,7 +161,7 @@ class UserController extends Controller
     }
 
     /**
-     * Remove user role
+     * Removes relationship between user and role
      *
      */
     private function removeRole($role, $user)

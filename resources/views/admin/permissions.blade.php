@@ -15,7 +15,7 @@
             @csrf
             <input type="text" placeholder="Nome da Permissão" name="name"><br>
             <input type="text" placeholder="Descrição" name="description"><br>
-            <button disabled>Cadastrar novo curso</button>
+            <button>Cadastrar novo curso</button>
         </form>
     </div>
 @endif
@@ -38,7 +38,7 @@
                 {{--Altera form pra PUT--}}
                 {{--<input type="hidden" name="_method" value="put">--}}
                 @method('PUT')
-                <button disabled>Atualizar permissão</button>
+                <button>Atualizar permissão</button>
             </form>
         @else
             <p>Registro não encontrado!</p>
@@ -65,12 +65,12 @@
                               style="float: left; padding-right: 5px">
                             @csrf
                             @method('DELETE')
-                            <button disabled>DELETAR</button>
+                            <button>DELETAR</button>
                         </form>
                         <form action="{{ route('admin.permissions.edit',[$iten->id]) }}" method="post">
                             @csrf
                             @method('GET')
-                            <button disabled>EDITAR</button>
+                            <button>EDITAR</button>
                         </form>
                     </div>
                     <hr>
@@ -96,12 +96,12 @@
                   style="float: left; padding-right: 5px">
                 @csrf
                 @method('DELETE')
-                <button disabled>DELETAR</button>
+                <button>DELETAR</button>
             </form>
             <form action="{{ route('admin.permissions.edit',[$record->id]) }}" method="post">
                 @csrf
                 @method('GET')
-                <button disabled>EDITAR</button>
+                <button>EDITAR</button>
             </form>
         </div>
 

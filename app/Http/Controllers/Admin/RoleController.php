@@ -20,7 +20,7 @@ class RoleController extends Controller
         $itens = Role::paginate(50); // limit de 3; Em blade: {{ $itens->links() }}
 
         // view() -> 'admin' é um diretório >>> views/admin/roles.blade.php
-        return view('admin.roles', compact('itens'), compact('goToSection'));
+        return view('admin.roles', compact('itens', 'goToSection'));
     }
 
     /**
@@ -68,12 +68,16 @@ class RoleController extends Controller
      */
     public function show(Role $role, $id)
     {
-        // dd($role); // como a rota tem nome diferente do controller, essa função não funciona
+        // Se a rota tiver nome diferente do Controller
+        if (!isset($role->id)) {
+            $role = Role::find($id);
+        }
+
         $goToSection = 'show';
-        $record = Role::find($id);
+        $record = $role;
 
         // view() -> 'admin' é um diretório >>> views/admin/courses.blade.php
-        return view('admin.roles', compact('goToSection'), compact('record'));
+        return view('admin.roles', compact('goToSection', 'record'));
     }
 
     /**
@@ -84,8 +88,13 @@ class RoleController extends Controller
      */
     public function edit(Role $role, $id)
     {
+        // Se a rota tiver nome diferente do Controller
+        if (!isset($role->id)) {
+            $role = Role::find($id);
+        }
+
         $goToSection = 'edit';
-        $record = Role::find($id);
+        $record = $role;
         $recordPerms = Permission::get();
 
         return view('admin.roles', compact('goToSection', 'record', 'recordPerms'));
@@ -109,7 +118,7 @@ class RoleController extends Controller
             return $messageError;
         }
 
-
+        // Se a rota tiver nome diferente do Controller
         if (!isset($role->id)) {
             $role = Role::find($id);
         }
@@ -126,7 +135,7 @@ class RoleController extends Controller
         }
 
 
-        // Verifica se o nome não é igual ao de outro papel
+        // Verifica se o nome não é igual ao de outro papel, exceto o dele mesmo
         $roleCheck = Role::where('name', '=', $data['name'])->first();
         if (isset($roleCheck) && ($roleCheck->id != $id)) {
             $messageError = 'Já existe um papel com o nome: ' . $data['name'];
@@ -160,7 +169,7 @@ class RoleController extends Controller
 
 
     /**
-     * Add role permissions
+     * Add relationship between role and permission
      *
      */
     private function addPerm($perm, $role)
@@ -179,11 +188,14 @@ class RoleController extends Controller
     }
 
     /**
-     * Check if permission is already role's
+     * Check if permission already has relationship to role
      *
      */
     private function checkPerm($perm, $role)
     {
+        // if (is_string($perm)) {
+        //     $perm = Permission::where('id', '=', $perm)->firstOrFail();
+        // }
 
         // roles() -> é um metodo do Model User
         return (boolean)$role->permissions()->find($perm->id);
@@ -191,7 +203,7 @@ class RoleController extends Controller
     }
 
     /**
-     * Remove role permission
+     * Removes relationship between role and permission
      *
      */
     private function removePerm($perm, $role)

@@ -25,6 +25,7 @@
         <a href="{{ route('admin.roles.create') }}">CADASTRAR NOVO PAPEL</a>
     </li>
 </ul>
+
 <ul>
     <li>
         <a href="{{ route('admin.permissions') }}">PERMISSÕES</a>
