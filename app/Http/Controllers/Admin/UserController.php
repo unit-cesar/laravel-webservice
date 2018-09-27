@@ -120,12 +120,12 @@ class UserController extends Controller
 
         if (isset($data['role'])) {
             // dd($data['role']);
-            $this->addRole($data['role'], $user);
+            $user->addRole($data['role']);
             return redirect()->back();
         }
 
         if (isset($data['removeRole'])) {
-            $this->removeRole($data['removeRole'], $user);
+            $user->removeRole($data['removeRole']);
             return redirect()->back();
         }
 
@@ -149,52 +149,4 @@ class UserController extends Controller
         return redirect()->route('admin.users');
     }
 
-
-    /**
-     * Removes relationship between user and role
-     *
-     */
-    private function addRole($role, $user)
-    {
-
-        if (is_string($role)) {
-            $role = Role::where('id', '=', $role)->firstOrFail();
-        }
-
-        if ($this->checkRole($role, $user)) {
-            return;
-        }
-
-        // roles() -> é um metodo do Model User
-        return $user->roles()->attach($role);
-    }
-
-    /**
-     * Check if role already has relationship to user
-     *
-     */
-    private function checkRole($role, $user)
-    {
-        // if (is_string($role)) {
-        //     $role = Role::where('id', '=', $role)->firstOrFail();
-        // }
-
-        // roles() -> é um metodo do Model User
-        return (boolean)$user->roles()->find($role->id);
-
-    }
-
-    /**
-     * Removes relationship between user and role
-     *
-     */
-    private function removeRole($role, $user)
-    {
-        if (is_string($role)) {
-            $role = Role::where('id', '=', $role)->firstOrFail();
-        }
-
-        // roles() -> é um metodo do Model User
-        return $user->roles()->detach($role);
-    }
 }

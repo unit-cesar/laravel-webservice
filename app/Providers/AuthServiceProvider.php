@@ -125,15 +125,13 @@ class AuthServiceProvider extends ServiceProvider
  * SuperUser
  * -Tudo
  *
- * PublicGuest
+ * Registered
  * -ver publicados
- *
- * Registered(Group)
  *
  * Author
  * -ver os publicados
  * -cria
- *
+ * -edita os seus
  *
  * Publisher
  * -ver os publicados
@@ -144,6 +142,7 @@ class AuthServiceProvider extends ServiceProvider
  * -publica os de outros
  * -deleta os seus
  * -deleta os de outros
+ * -ver os usuários
  *
  * Manager
  * -ver os publicados
@@ -154,7 +153,8 @@ class AuthServiceProvider extends ServiceProvider
  * -publica os de outros
  * -deleta os seus
  * -deleta os de outros
- * -gerencia usuários(cria, lista, atualiza, deleta)
- * -gerencia ACL (papeis e permissões)
+ * -gerencia usuários(lista, cria, atualiza, deleta)
+ * -gerencia ACL - Papeis (lista, cria, atualiza, deleta)
+ * -gerencia ACL - Permissões (lista)
  *
  * */
