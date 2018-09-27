@@ -46,14 +46,14 @@ class User extends Authenticatable
      * Checks if permission belongs to the role
      *
      */
-    public function hasRole($roles)
+    public function hasRole($roleObj)
     {
         $userRoles = $this->roles;
 
         // dd($userRoles);
-        // dd($roles);
-        // dd($roles->intersect($userRoles)->count());
-        return $roles->intersect($userRoles)->count();
+        // dd($roleObj);
+        // dd($roleObj->intersect($userRoles)->count());
+        return $roleObj->intersect($userRoles)->count();
     }
 
 
