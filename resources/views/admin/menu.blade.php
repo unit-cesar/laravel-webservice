@@ -33,12 +33,15 @@
         <a href="{{ route('admin.permissions.create') }}">CADASTRAR NOVA PERMISSÃO</a>
     </li>
 </ul>
-
-<ul>
-    <li>
-        <a href="{{ route('admin.courses') }}">CURSOS</a>
-    </li>
-    <li>
-        <a href="{{ route('admin.courses.create') }}">CADASTRAR NOVO CURSO</a>
-    </li>
-</ul>
+@can('curso-view')
+    <ul>
+        <li>
+            <a href="{{ route('admin.courses') }}">CURSOS</a>
+        </li>
+        @can('curso-create')
+            <li>
+                <a href="{{ route('admin.courses.create') }}">CADASTRAR NOVO CURSO</a>
+            </li>
+        @endcan
+    </ul>
+@endcan

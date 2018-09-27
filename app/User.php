@@ -35,4 +35,20 @@ class User extends Authenticatable
     {
         return $this->belongsToMany(Role::class);
     }
+
+    public function isSuperUser()
+    {
+        $role = Role::where('name', '=', 'SuperUser')->firstOrFail();
+        return (boolean)$this->roles()->find($role->id);
+    }
+
+    public function hasRole($roles)
+    {
+        $userRoles = $this->roles;
+
+        // dd($userRoles);
+        // dd($roles);
+        // dd($roles->intersect($userRoles)->count());
+        return $roles->intersect($userRoles)->count();
+    }
 }
