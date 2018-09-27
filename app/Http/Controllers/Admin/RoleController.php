@@ -144,12 +144,12 @@ class RoleController extends Controller
 
         if (isset($data['perm'])) {
             // dd($data['role']);
-            $this->addPerm($data['perm'], $role);
+            $role->addPerm($data['perm']);
             return redirect()->back();
         }
 
         if (isset($data['removePerm'])) {
-            $this->removePerm($data['removePerm'], $role);
+            $role->removePerm($data['removePerm']);
             return redirect()->back();
         }
 
@@ -189,52 +189,4 @@ class RoleController extends Controller
         return redirect()->route('admin.roles');
     }
 
-
-    /**
-     * Add relationship between role and permission
-     *
-     */
-    private function addPerm($perm, $role)
-    {
-
-        if (is_string($perm)) {
-            $perm = Permission::where('id', '=', $perm)->firstOrFail();
-        }
-
-        if ($this->checkPerm($perm, $role)) {
-            return;
-        }
-
-        // roles() -> é um metodo do Model User
-        return $role->permissions()->attach($perm);
-    }
-
-    /**
-     * Check if permission already has relationship to role
-     *
-     */
-    private function checkPerm($perm, $role)
-    {
-        // if (is_string($perm)) {
-        //     $perm = Permission::where('id', '=', $perm)->firstOrFail();
-        // }
-
-        // roles() -> é um metodo do Model User
-        return (boolean)$role->permissions()->find($perm->id);
-
-    }
-
-    /**
-     * Removes relationship between role and permission
-     *
-     */
-    private function removePerm($perm, $role)
-    {
-        if (is_string($perm)) {
-            $perm = Permission::where('id', '=', $perm)->firstOrFail();
-        }
-
-        // roles() -> é um metodo do Model User
-        return $role->permissions()->detach($perm);
-    }
 }

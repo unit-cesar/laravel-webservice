@@ -58,7 +58,7 @@ class User extends Authenticatable
 
 
     /**
-     * Removes relationship between user and role
+     * Add relationship between user and role
      *
      */
     public function addRole($role)
