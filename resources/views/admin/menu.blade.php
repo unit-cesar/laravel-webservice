@@ -11,29 +11,37 @@
         <a href="{{ route('admin.') }}">HOME > Admin</a>
     </li>
 </ul>
-
+@can('user-view')
 <ul>
     <li>
         <a href="{{ route('admin.users') }}">USUÁRIOS</a>
     </li>
 </ul>
+@endcan
+@can('role-view')
 <ul>
     <li>
         <a href="{{ route('admin.roles') }}">PAPEIS</a>
     </li>
+    @can('role-create')
     <li>
         <a href="{{ route('admin.roles.create') }}">CADASTRAR NOVO PAPEL</a>
     </li>
+    @endcan
 </ul>
-
-<ul>
-    <li>
-        <a href="{{ route('admin.permissions') }}">PERMISSÕES</a>
-    </li>
-    <li>
-        <a href="{{ route('admin.permissions.create') }}">CADASTRAR NOVA PERMISSÃO</a>
-    </li>
-</ul>
+@endcan
+@can('permission-view')
+    <ul>
+        <li>
+            <a href="{{ route('admin.permissions') }}">PERMISSÕES</a>
+        </li>
+        @can('permission-create')
+            <li>
+                <a href="{{ route('admin.permissions.create') }}">CADASTRAR NOVA PERMISSÃO</a>
+            </li>
+        @endcan
+    </ul>
+@endcan
 @can('curso-view')
     <ul>
         <li>
