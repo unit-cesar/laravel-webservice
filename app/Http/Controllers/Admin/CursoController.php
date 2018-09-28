@@ -21,8 +21,8 @@ class CursoController extends Controller
 
         $goToSection = 'index';
         // $itens = Curso::all(); // Todos
-        $itens = Curso::paginate(3); // limit de 3; Em blade: {{ $itens->links() }}
-
+        // $itens = Curso::paginate(3); // limit de 3; Em blade: {{ $itens->links() }}
+        $itens = Curso::all();
 
         // view() -> 'admin' é um diretório >>> views/admin/courses.blade.php
         return view('admin.courses', compact('itens'), compact('goToSection'));

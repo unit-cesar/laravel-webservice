@@ -38,8 +38,18 @@ class AuthServiceProvider extends ServiceProvider
 
     public function allPermissions()
     {
-        return Permission::with('role')->get();
+        // Usado o try para não conflitar na criação das migrações (php artisan migrate)
+        try {
+
+            return Permission::with('role')->get();
+
+        } catch (\Exception $e) {
+
+            return [];
+
+        }
     }
+
 }
 /*
  * ACL Map - Anarquico

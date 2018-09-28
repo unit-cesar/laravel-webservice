@@ -100,13 +100,13 @@
             </form>
         </div>
         <div style="padding-top: 50px">
-            <a href="{{ route('contacts') }}">Contatos</a>
+            <a href="{{ route('contacts') }}">contatos/</a>
             {{--Pra enviar parametros:--}}
             {{--<a href="{{ route('contacts', $data->id) }}">Contatos</a>--}}
         </div>
-        <div style="padding-top: 50px">
+        <div style="padding-top: 10px">
             {{--<a href="{{ route('contacts.show',[435]) }}">contato/{id} as contacts.show</a>--}}
-            <a href="{{ route('contacts.show','435') }}">contato/{id} as contacts.show</a>
+            <a href="{{ route('contacts.show','5') }}">contatos/5</a>
         </div>
         <div style="padding-top: 50px">
             <a href="{{ route('admin.courses') }}">Rota interna: adm/curso as admin.courses</a>

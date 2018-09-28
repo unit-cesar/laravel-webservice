@@ -14,9 +14,12 @@ class ContactController extends Controller
      */
     public function index()
     {
-//        $contacts = new \App\Contact();
-        $contacts = new Contact();
-        dd($contacts->indexModel());
+        // $contacts = new \App\Contact();
+        // $contacts = new Contact();
+        // dd($contacts->indexModel());
+
+        $contacts = Contact::all();
+        dd($contacts);
     }
 
     /**
@@ -46,15 +49,19 @@ class ContactController extends Controller
      * @param  \App\Contact $contact
      * @return \Illuminate\Http\Response
      */
-    public function show(Contact $contact)
+    public function show(Contact $contact, $id) // Precisa do ID devido a URL ser diferente do nome do Controller
     {
-        // Não capta o ID da url sem o Request <<
-        //dd($contact['id']);
+        // dd($contact); // Modelo vazio
 
-        // Fazer busca real no BD
-        $contacts = new Contact();
-        $res = $contacts->showModel($contact['id']);
-        dd($res);
+        // $contact = new Contact();
+        // dd($contact); // Modelo vazio
+        // $res = $contact->showModel(); // Buscar na array
+        // dd($res);
+
+        // Buscar no DB
+        $contact = Contact::find($id);
+        dd($contact);
+
     }
 
     /**
