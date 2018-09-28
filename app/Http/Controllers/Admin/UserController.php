@@ -127,7 +127,8 @@ class UserController extends Controller
         if (isset($data['removeRole'])) {
 
             // Verifica se não é role 'SuperAdmin' do user com 'id==1'
-            abort_if(($data['removeRole'] == 1) && ($user->id == 1), 403, 'Este papel não pode ser removido para este usuário!');
+            abort_if(($data['removeRole'] == 1) && ($user->id == 1), 403,
+                'Este papel não pode ser removido para este usuário!');
 
             $user->removeRole($data['removeRole']);
             return redirect()->back();
@@ -163,7 +164,10 @@ class UserController extends Controller
      */
     private function protectedUsers($id)
     {
-        // SuperUser
+        // Users of tests
+        abort_if($id <= 6, 403, 'Este usuário é de TESTES e não pode ser apagado!');
+
+        // SuperUsers
         $user = User::find($id);
         $roleObj = collect([]);
         foreach ($user->roles as $role) {

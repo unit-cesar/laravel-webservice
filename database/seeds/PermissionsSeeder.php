@@ -12,47 +12,178 @@ class PermissionsSeeder extends Seeder
      */
     public function run()
     {
-        // firstOrCreate não duplica se existir
-        $role1 = Permission::firstOrCreate([
-            'name' => 'role-view',
-            'description' => 'Listar Papeis'
-        ]);
+        // Força deletar pra recriar
+        for ($i = 1; $i <= 16; $i++) {
+            if (Permission::find($i)) {
 
-        $role2 = Permission::firstOrCreate([
-            'name' => 'role-create',
-            'description' => 'Criar Papeis'
-        ]);
+                Permission::find($i)->delete();
 
-        $role3 = Permission::firstOrCreate([
-            'name' => 'role-update',
-            'description' => 'Atualizar Papeis'
-        ]);
+            }
+        }
 
-        $role4 = Permission::firstOrCreate([
-            'name' => 'role-delete',
-            'description' => 'Deletar Papeis'
-        ]);
+        // updateOrCreate não duplica se existir
+        Permission::updateOrCreate(
+            [
+                'id' => '1'
+            ],
+            [
+                'name' => 'curso-view',
+                'description' => 'Listar Cursos'
+            ]
+        );
 
-        $curso1 = Permission::firstOrCreate([
-            'name' => 'curso-view',
-            'description' => 'Listar Cursos'
-        ]);
+        Permission::updateOrCreate(
+            [
+                'id' => '2'
+            ],
+            [
+                'name' => 'curso-create',
+                'description' => 'Criar Cursos'
+            ]
+        );
 
-        $curso2 = Permission::firstOrCreate([
-            'name' => 'curso-create',
-            'description' => 'Criar Cursos'
-        ]);
+        Permission::updateOrCreate(
+            [
+                'id' => '3'
+            ],
+            [
+                'name' => 'curso-update',
+                'description' => 'Atualizar Cursos'
+            ]
+        );
 
-        $curso3 = Permission::firstOrCreate([
-            'name' => 'curso-update',
-            'description' => 'Atualizar Cursos'
-        ]);
+        Permission::updateOrCreate(
+            [
+                'id' => '4'
+            ],
+            [
+                'name' => 'curso-delete',
+                'description' => 'Deletar Cursos'
+            ]
+        );
 
-        $curso4 = Permission::firstOrCreate([
-            'name' => 'curso-delete',
-            'description' => 'Deletar Cursos'
-        ]);
+        Permission::updateOrCreate(
+            [
+                'id' => '5'
+            ],
+            [
+                'name' => 'role-view',
+                'description' => 'Listar Papeis'
+            ]
+        );
 
-        echo 'New permissions created'.PHP_EOL;
+        Permission::updateOrCreate(
+            [
+                'id' => '6'
+            ],
+            [
+                'name' => 'role-create',
+                'description' => 'Criar Papeis'
+            ]
+        );
+
+        Permission::updateOrCreate(
+            [
+                'id' => '7'
+            ],
+            [
+                'name' => 'role-update',
+                'description' => 'Atualizar Papeis'
+            ]
+        );
+
+        Permission::updateOrCreate(
+            [
+                'id' => '8'
+            ],
+            [
+                'name' => 'role-delete',
+                'description' => 'Deletar Papeis'
+            ]
+        );
+
+        Permission::updateOrCreate(
+            [
+                'id' => '9'
+            ],
+            [
+                'name' => 'permission-view',
+                'description' => 'Listar Permissão'
+            ]
+        );
+
+        Permission::updateOrCreate(
+            [
+                'id' => '10'
+            ],
+            [
+                'name' => 'permission-create',
+                'description' => 'Criar Permissão'
+            ]
+        );
+
+        Permission::updateOrCreate(
+            [
+                'id' => '11'
+            ],
+            [
+                'name' => 'permission-update',
+                'description' => 'Atualizar Permissão'
+            ]
+        );
+
+        Permission::updateOrCreate(
+            [
+                'id' => '12'
+            ],
+            [
+                'name' => 'permission-delete',
+                'description' => 'Deletar Permissão'
+            ]
+        );
+
+        Permission::updateOrCreate(
+            [
+                'id' => '13'
+            ],
+            [
+                'name' => 'user-view',
+                'description' => 'Listar Usuários'
+            ]
+        );
+
+        Permission::updateOrCreate(
+            [
+                'id' => '14'
+            ],
+            [
+                'name' => 'user-create',
+                'description' => 'Criar Usuários'
+            ]
+        );
+
+        Permission::updateOrCreate(
+            [
+                'id' => '15'
+            ],
+            [
+                'name' => 'user-update',
+                'description' => 'Atualizar Usuários'
+            ]
+        );
+
+        Permission::updateOrCreate(
+            [
+                'id' => '16'
+            ],
+            [
+                'name' => 'user-delete',
+                'description' => 'Deletar Usuários'
+            ]
+        );
+
+
+        echo 'Permissions updated or created successfully!' . PHP_EOL;
     }
 }
+
