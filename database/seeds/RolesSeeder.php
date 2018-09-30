@@ -75,6 +75,7 @@ class RolesSeeder extends Seeder
 
         // Add Roles to users
         Role::find(2)->addPerm('1');
+        Role::find(3)->addPerm('1');
         Role::find(3)->addPerm('2');
         Role::find(3)->addPerm('3');
         Role::find(3)->addPerm('4');

@@ -3,9 +3,12 @@
 namespace App;
 
 use Illuminate\Notifications\Notifiable;
-use Illuminate\Contracts\Auth\MustVerifyEmail;
+// use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
+/**
+ * @property mixed roles
+ */
 class User extends Authenticatable
 {
     use Notifiable;
@@ -44,7 +47,8 @@ class User extends Authenticatable
 
     /**
      * Checks if permission belongs to the role
-     *
+     * @param $roleObj
+     * @return array
      */
     public function hasRole($roleObj)
     {
@@ -59,7 +63,8 @@ class User extends Authenticatable
 
     /**
      * Add relationship between user and role
-     *
+     * @param $role
+     * @return int
      */
     public function addRole($role)
     {
@@ -68,7 +73,7 @@ class User extends Authenticatable
         }
 
         if ($this->checkRole($role)) {
-            return;
+            return 0;
         }
 
         // roles() -> é um metodo do Model User
@@ -77,7 +82,8 @@ class User extends Authenticatable
 
     /**
      * Check if role already has relationship to user
-     *
+     * @param $role
+     * @return bool
      */
     public function checkRole($role)
     {
@@ -90,7 +96,8 @@ class User extends Authenticatable
 
     /**
      * Removes relationship between user and role
-     *
+     * @param $role
+     * @return int
      */
     public function removeRole($role)
     {
