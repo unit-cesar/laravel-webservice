@@ -141,7 +141,7 @@ class PermissionController extends Controller
             return $messageError;
         }
 
-        // dd($curso->id); // Por segurança buscar pelo id originário($curso) e não o enviado($request)
+        // dd($course->id); // Por segurança buscar pelo id originário($course) e não o enviado($request)
         $permission->update($data);
 
         // return redirect()->back();

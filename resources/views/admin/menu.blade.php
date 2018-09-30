@@ -42,12 +42,12 @@
         @endcan
     </ul>
 @endcan
-@can('curso-view')
+@can('course-view')
     <ul>
         <li>
             <a href="{{ route('admin.courses') }}">CURSOS</a>
         </li>
-        @can('curso-create')
+        @can('course-create')
             <li>
                 <a href="{{ route('admin.courses.create') }}">CADASTRAR NOVO CURSO</a>
             </li>

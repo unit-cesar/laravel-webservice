@@ -43,7 +43,7 @@ Route::name('admin.')->prefix('adm')->middleware('auth')->namespace('Admin')->gr
     });
 
     // URL em português e codigo interno em inglês
-    Route::resource('cursos', 'CursoController')->names([
+    Route::resource('cursos', 'CourseController')->names([
         'index' => 'courses',
         'create' => 'courses.create',
         'store' => 'courses.store',

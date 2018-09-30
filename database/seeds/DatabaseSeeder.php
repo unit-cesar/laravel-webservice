@@ -16,6 +16,6 @@ class DatabaseSeeder extends Seeder
         $this->call(UsersTableSeeder::class);
 
         factory(\App\User::class, 3)->create(); // Fake users don't have role
-        factory(\App\Curso::class, 10)->create();
+        factory(\App\Course::class, 10)->create();
     }
 }

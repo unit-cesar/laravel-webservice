@@ -27,7 +27,7 @@ class PermissionsSeeder extends Seeder
                 'id' => '1'
             ],
             [
-                'name' => 'curso-view',
+                'name' => 'course-view',
                 'description' => 'Listar Cursos'
             ]
         );
@@ -37,7 +37,7 @@ class PermissionsSeeder extends Seeder
                 'id' => '2'
             ],
             [
-                'name' => 'curso-create',
+                'name' => 'course-create',
                 'description' => 'Criar Cursos'
             ]
         );
@@ -47,7 +47,7 @@ class PermissionsSeeder extends Seeder
                 'id' => '3'
             ],
             [
-                'name' => 'curso-update',
+                'name' => 'course-update',
                 'description' => 'Atualizar Cursos'
             ]
         );
@@ -57,7 +57,7 @@ class PermissionsSeeder extends Seeder
                 'id' => '4'
             ],
             [
-                'name' => 'curso-delete',
+                'name' => 'course-delete',
                 'description' => 'Deletar Cursos'
             ]
         );
