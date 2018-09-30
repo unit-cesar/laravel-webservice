@@ -82,41 +82,11 @@
             Laravel
         </div>
 
-        <div>
-            <form action="/fooPost" method="POST">
-                @csrf
-                <input type="text" name="testPost" placeholder="Test POST">
-                <input type="text" name="testPost2" placeholder="Test POST 2">
-                <br>
-                <button>Enviar</button>
-            </form>
-        </div>
-        <div style="padding-top: 50px">
-            <form action="/fooControllerPost" method="POST">
-                @csrf
-                <input type="text" name="id" placeholder="Id to Controller">
-                <br>
-                <button>Enviar</button>
-            </form>
-        </div>
-        <div style="padding-top: 50px">
-            <a href="{{ route('contacts') }}">contatos/</a>
-            {{--Pra enviar parametros:--}}
-            {{--<a href="{{ route('contacts', $data->id) }}">Contatos</a>--}}
-        </div>
-        <div style="padding-top: 10px">
-            {{--<a href="{{ route('contacts.show',[435]) }}">contato/{id} as contacts.show</a>--}}
-            <a href="{{ route('contacts.show','5') }}">contatos/5</a>
-        </div>
-        <div style="padding-top: 50px">
-            <a href="{{ route('admin.courses') }}">Rota interna: adm/curso as admin.courses</a>
-        </div>
-
         <div style="padding-top: 50px">
             @guest
                 <p>User não autenticado!</p>
             @else
-                <h1>Área Restrita</h1>
+                <h1>Área restrita de testes</h1>
                 <p>User <strong>{{ Auth::user()->name }}</strong> autenticado!</p>
                 <p><a href="{{ route('admin.') }}">Admin</a></p>
                 <p><a href="{{ route('admin.users') }}">Users</a></p>
@@ -124,8 +94,6 @@
                 <p><a href="{{ route('admin.courses') }}">Cursos</a></p>
             @endguest
         </div>
-
-
 
     </div>
 </div>

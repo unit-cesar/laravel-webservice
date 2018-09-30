@@ -4,6 +4,24 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | Bootstrap Steps
+    |--------------------------------------------------------------------------
+    | git clone...
+    | install npm
+    | composer update
+    | //Altera nome, versão...
+    | //Criar banco (utf8_general_ci)
+    | //Editar '.env' e 'config/database.php'
+    | php artisan migrate:refresh --seed
+    | //Renova APP_KEY
+    | php artisan key:generate
+    | composer dump-autoload
+    | php artisan serve
+    |
+    */
+
+    /*
+    |--------------------------------------------------------------------------
     | Application Name
     |--------------------------------------------------------------------------
     |
@@ -105,7 +123,7 @@ return [
     |
     */
 
-    'key' => env('APP_KEY','base64:HYPx5FgozPiCQiBGDLZ7YWHUMyrzFdpyq+CbgLHOO40='),
+    'key' => env('APP_KEY', 'base64:HYPx5FgozPiCQiBGDLZ7YWHUMyrzFdpyq+CbgLHOO40='),
 
     'cipher' => 'AES-256-CBC',
 

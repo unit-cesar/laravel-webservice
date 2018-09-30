@@ -17,6 +17,5 @@ class DatabaseSeeder extends Seeder
 
         factory(\App\User::class, 3)->create(); // Fake users don't have role
         factory(\App\Curso::class, 10)->create();
-        factory(\App\Contact::class, 10)->create();
     }
 }
