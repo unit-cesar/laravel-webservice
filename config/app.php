@@ -18,6 +18,10 @@ return [
     | composer dump-autoload
     | php artisan serve
     |
+    | Cria repositório no github e envia
+    | git remote set-url origin ...
+    | git push -u origin master
+    |
     */
 
     /*
