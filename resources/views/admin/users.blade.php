@@ -87,16 +87,16 @@
     <div>
         <h3>Lista de Usuários:</h3>
         <ul>
-            @foreach($itens as $iten)
+            @foreach($items as $item)
                 <li>
                     <ul>
-                        <li>Id: {{ $iten->id }}</li>
-                        <li><a href="{{ route('admin.users.show', $iten->id) }}">{{ $iten->name }}</a></li>
-                        <li>Email: {{ $iten->email }}</li>
-                        @if (count($iten->roles)>0)
+                        <li>Id: {{ $item->id }}</li>
+                        <li><a href="{{ route('admin.users.show', $item->id) }}">{{ $item->name }}</a></li>
+                        <li>Email: {{ $item->email }}</li>
+                        @if (count($item->roles)>0)
                             <li>Papeis:</li>
                             <ul>
-                                @foreach($iten->roles as $role)
+                                @foreach($item->roles as $role)
                                     <li>{{ $role->name }}</li>
                                 @endforeach
                             </ul>
@@ -104,13 +104,13 @@
                     </ul>
 
                     <div style="padding-top: 10px">
-                        <form action="{{ route('admin.users.destroy',[$iten->id]) }}" method="post"
+                        <form action="{{ route('admin.users.destroy',[$item->id]) }}" method="post"
                               style="float: left; padding-right: 5px">
                             @csrf
                             @method('DELETE')
                             <button>DELETAR</button>
                         </form>
-                        <form action="{{ route('admin.users.edit',[$iten->id]) }}" method="post">
+                        <form action="{{ route('admin.users.edit',[$item->id]) }}" method="post">
                             @csrf
                             @method('GET')
                             <button>EDITAR</button>
@@ -120,7 +120,7 @@
                 </li>
             @endforeach
         </ul>
-        {{--<div>{{ $itens->links() }}</div>--}}
+        {{--<div>{{ $items->links() }}</div>--}}
     </div>
 @endif
 

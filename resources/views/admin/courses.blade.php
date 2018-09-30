@@ -68,25 +68,25 @@
     <div>
         <h3>Lista de Cursos:</h3>
         <ul>
-            @foreach($itens as $iten)
+            @foreach($items as $item)
                 <li>
                     <ul>
-                        <li>Id: {{ $iten->id }}</li>
-                        <li>Curso: <a href="{{ route('admin.courses.show', $iten->id) }}">{{ $iten->name }}</a></li>
-                        <li>Preço: {{ $iten->price }}</li>
-                        <li>Descrição: {{ $iten->description }}</li>
-                        <li>Publicar: {{ $iten->status === 'y' ? 'sim' : 'não' }}</li>
-                        <li>Imagem: {{ isset($iten->image) ? $iten->image : '[Sem imagem]' }}</li>
+                        <li>Id: {{ $item->id }}</li>
+                        <li>Curso: <a href="{{ route('admin.courses.show', $item->id) }}">{{ $item->name }}</a></li>
+                        <li>Preço: {{ $item->price }}</li>
+                        <li>Descrição: {{ $item->description }}</li>
+                        <li>Publicar: {{ $item->status === 'y' ? 'sim' : 'não' }}</li>
+                        <li>Imagem: {{ isset($item->image) ? $item->image : '[Sem imagem]' }}</li>
                     </ul>
 
                     <div style="padding-top: 10px">
-                        <form action="{{ route('admin.courses.destroy',[$iten->id]) }}" method="post"
+                        <form action="{{ route('admin.courses.destroy',[$item->id]) }}" method="post"
                               style="float: left; padding-right: 5px">
                             @csrf
                             @method('DELETE')
                             <button>DELETAR</button>
                         </form>
-                        <form action="{{ route('admin.courses.edit',[$iten->id]) }}" method="post">
+                        <form action="{{ route('admin.courses.edit',[$item->id]) }}" method="post">
                             @csrf
                             @method('GET')
                             <button>EDITAR</button>
@@ -96,7 +96,7 @@
                 </li>
             @endforeach
         </ul>
-        {{--<div>{{ $itens->links() }}</div>--}}
+        {{--<div>{{ $items->links() }}</div>--}}
     </div>
 @endif
 

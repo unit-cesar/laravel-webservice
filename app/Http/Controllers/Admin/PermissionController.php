@@ -20,10 +20,10 @@ class PermissionController extends Controller
         abort_if(Gate::denies('permission-view'), 403);
 
         $goToSection = 'index';
-        $itens = Permission::paginate(50); // limit de 3; Em blade: {{ $itens->links() }}
+        $items = Permission::paginate(50); // limit de 3; Em blade: {{ $items->links() }}
 
         // view() -> 'admin' é um diretório >>> views/admin/permissions.blade.php
-        return view('admin.permissions', compact('itens', 'goToSection'));
+        return view('admin.permissions', compact('items', 'goToSection'));
     }
 
     /**
@@ -60,8 +60,7 @@ class PermissionController extends Controller
 
         // Verifica se o nome é unico
         if ((boolean)Permission::where('name', '=', $data['name'])->first()) {
-            $messageError = 'Já existe uma permissão com o nome: ' . $data['name'];
-            return $messageError;
+            abort(403, 'Já existe uma permissão com o nome: ' . $data['name']);
         }
 
         Permission::create($data);
@@ -73,6 +72,7 @@ class PermissionController extends Controller
      * Display the specified resource.
      *
      * @param  \App\Permission $permission
+     * @param $id
      * @return \Illuminate\Http\Response
      */
     public function show(Permission $permission, $id)
@@ -96,6 +96,7 @@ class PermissionController extends Controller
      * Show the form for editing the specified resource.
      *
      * @param  \App\Permission $permission
+     * @param $id
      * @return \Illuminate\Http\Response
      */
     public function edit(Permission $permission, $id)
@@ -119,6 +120,7 @@ class PermissionController extends Controller
      *
      * @param  \Illuminate\Http\Request $request
      * @param  \App\Permission $permission
+     * @param $id
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, Permission $permission, $id)
@@ -137,8 +139,7 @@ class PermissionController extends Controller
         // Verifica se o nome não é igual ao de outro papel, exceto o dele mesmo
         $permissionCheck = Permission::where('name', '=', $data['name'])->first();
         if (isset($permissionCheck) && ($permissionCheck->id != $id)) {
-            $messageError = 'Já existe uma permissão com o nome: ' . $data['name'];
-            return $messageError;
+            abort(403, 'Já existe uma permissão com o nome: ' . $data['name']);
         }
 
         // dd($course->id); // Por segurança buscar pelo id originário($course) e não o enviado($request)
@@ -152,6 +153,7 @@ class PermissionController extends Controller
      * Remove the specified resource from storage.
      *
      * @param  \App\Permission $permission
+     * @param $id
      * @return \Illuminate\Http\Response
      */
     public function destroy(Permission $permission, $id)
@@ -159,7 +161,17 @@ class PermissionController extends Controller
         // ACL
         abort_if(Gate::denies('permission-delete'), 403);
 
-        Permission::find($id)->delete();
+        // Se a rota tiver nome diferente do Controller
+        if (!isset($permission->id)) {
+            $permission = Permission::find($id);
+        }
+
+        try {
+            $permission->delete();
+        } catch (\Exception $e) {
+            abort(403, 'Não foi possível deletar o registro!');
+        }
+
         return redirect()->route('admin.permissions');
     }
 }

@@ -25,10 +25,10 @@ class UserController extends Controller
         // }
 
         $goToSection = 'index';
-        $itens = User::paginate(50); // limit de 3; Em blade: {{ $itens->links() }}
+        $items = User::paginate(50); // limit de 3; Em blade: {{ $items->links() }}
 
         // view() -> 'admin' é um diretório >>> views/admin/users.blade.php
-        return view('admin.users', compact('itens', 'goToSection'));
+        return view('admin.users', compact('items', 'goToSection'));
     }
 
     /**
@@ -56,12 +56,17 @@ class UserController extends Controller
     {
         // ACL
         abort_if(Gate::denies('user-create'), 403);
+
+        $data = $request->all();
+
+        return redirect()->route('admin.permissions', compact('data'));
     }
 
     /**
      * Display the specified resource.
      *
      * @param  \App\User $user
+     * @param $id
      * @return \Illuminate\Http\Response
      */
     public function show(User $user, $id)
@@ -69,9 +74,14 @@ class UserController extends Controller
         // ACL
         abort_if(Gate::denies('user-view'), 403);
 
+        // Se a rota tiver nome diferente do Controller
+        if (!isset($user->id)) {
+            $user = User::find($id);
+        }
+
         // dd($role); // como a rota tem nome diferente do controller, essa função não funciona
         $goToSection = 'show';
-        $record = User::find($id);
+        $record = $user;
 
         // view() -> 'admin' é um diretório >>> views/admin/courses.blade.php
         return view('admin.users', compact('goToSection', 'record'));
@@ -81,6 +91,7 @@ class UserController extends Controller
      * Show the form for editing the specified resource.
      *
      * @param  \App\User $user
+     * @param $id
      * @return \Illuminate\Http\Response
      */
     public function edit(User $user, $id)
@@ -88,9 +99,14 @@ class UserController extends Controller
         // ACL
         abort_if(Gate::denies('user-update'), 403);
 
+        // Se a rota tiver nome diferente do Controller
+        if (!isset($user->id)) {
+            $user = User::find($id);
+        }
+
         // dd($user); // como a rota tem nome diferente do controller, essa função não funciona
         $goToSection = 'edit';
-        $record = User::find($id);
+        $record = $user;
         $recordRoles = Role::get();
         // dd($recordRoles);
         // dd($record->roles);
@@ -103,6 +119,7 @@ class UserController extends Controller
      *
      * @param  \Illuminate\Http\Request $request
      * @param  \App\User $user
+     * @param $id
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, User $user, $id)
@@ -144,6 +161,7 @@ class UserController extends Controller
      * Remove the specified resource from storage.
      *
      * @param  \App\User $user
+     * @param $id
      * @return \Illuminate\Http\Response
      */
     public function destroy(User $user, $id)
@@ -153,14 +171,25 @@ class UserController extends Controller
 
         $this->protectedUsers($id);
 
-        User::find($id)->delete();
+        // Se a rota tiver nome diferente do Controller
+        if (!isset($user->id)) {
+            $user = User::find($id);
+        }
+
+        try {
+            $user->delete();
+        } catch (\Exception $e) {
+            abort(403, 'Não foi possível deletar o registro!');
+        }
+
         return redirect()->route('admin.users');
     }
 
     /**
      * Check if user is a SuperUser
      *
-     * @return boolean
+     * @param $id
+     * @return void
      */
     private function protectedUsers($id)
     {

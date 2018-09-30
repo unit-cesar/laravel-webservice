@@ -87,32 +87,32 @@
     <div>
         <h3>Lista de Papeis:</h3>
         <ul>
-            @foreach($itens as $iten)
+            @foreach($items as $item)
                 <li>
                     <ul>
-                        <li>Id: {{ $iten->id }}</li>
-                        <li>Role: <a href="{{ route('admin.roles.show', $iten->id) }}">{{ $iten->name }}</a></li>
-                        <li>Descrição: {{ $iten->description }}</li>
-                        @if (count($iten->permissions)>0)
+                        <li>Id: {{ $item->id }}</li>
+                        <li>Role: <a href="{{ route('admin.roles.show', $item->id) }}">{{ $item->name }}</a></li>
+                        <li>Descrição: {{ $item->description }}</li>
+                        @if (count($item->permissions)>0)
                             <li>Permissões:</li>
                             <ul>
-                                @foreach($iten->permissions as $perm)
+                                @foreach($item->permissions as $perm)
                                     <li>{{ $perm->name }}</li>
                                 @endforeach
                             </ul>
                         @endif
                     </ul>
 
-                    @if ($iten->id != 1 && $iten->id != 2)
+                    @if ($item->id != 1 && $item->id != 2)
                         {{--Mesmo que acesse pela URL, até mesmo sendo o SuperAdmin, é bloqueado alterar IDs 1 e 2 pelo controller--}}
                         <div style="padding-top: 10px">
-                            <form action="{{ route('admin.roles.destroy',[$iten->id]) }}" method="post"
+                            <form action="{{ route('admin.roles.destroy',[$item->id]) }}" method="post"
                                   style="float: left; padding-right: 5px">
                                 @csrf
                                 @method('DELETE')
                                 <button>DELETAR</button>
                             </form>
-                            <form action="{{ route('admin.roles.edit',[$iten->id]) }}" method="post">
+                            <form action="{{ route('admin.roles.edit',[$item->id]) }}" method="post">
                                 @csrf
                                 @method('GET')
                                 <button>EDITAR</button>
@@ -123,7 +123,7 @@
                 </li>
             @endforeach
         </ul>
-        {{--<div>{{ $itens->links() }}</div>--}}
+        {{--<div>{{ $items->links() }}</div>--}}
     </div>
 @endif
 

@@ -51,23 +51,23 @@
     <div>
         <h3>Lista de Permissões:</h3>
         <ul>
-            @foreach($itens as $iten)
+            @foreach($items as $item)
                 <li>
                     <ul>
-                        <li>Id: {{ $iten->id }}</li>
-                        <li>Permissão: <a href="{{ route('admin.permissions.show', $iten->id) }}">{{ $iten->name }}</a>
+                        <li>Id: {{ $item->id }}</li>
+                        <li>Permissão: <a href="{{ route('admin.permissions.show', $item->id) }}">{{ $item->name }}</a>
                         </li>
-                        <li>Descrição: {{ $iten->description }}</li>
+                        <li>Descrição: {{ $item->description }}</li>
                     </ul>
 
                     <div style="padding-top: 10px">
-                        <form action="{{ route('admin.permissions.destroy',[$iten->id]) }}" method="post"
+                        <form action="{{ route('admin.permissions.destroy',[$item->id]) }}" method="post"
                               style="float: left; padding-right: 5px">
                             @csrf
                             @method('DELETE')
                             <button>DELETAR</button>
                         </form>
-                        <form action="{{ route('admin.permissions.edit',[$iten->id]) }}" method="post">
+                        <form action="{{ route('admin.permissions.edit',[$item->id]) }}" method="post">
                             @csrf
                             @method('GET')
                             <button>EDITAR</button>
@@ -77,7 +77,7 @@
                 </li>
             @endforeach
         </ul>
-        {{--<div>{{ $itens->links() }}</div>--}}
+        {{--<div>{{ $items->links() }}</div>--}}
     </div>
 @endif
 

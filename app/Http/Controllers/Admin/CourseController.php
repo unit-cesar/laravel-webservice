@@ -20,12 +20,12 @@ class CourseController extends Controller
         abort_if(Gate::denies('course-view'), 403);
 
         $goToSection = 'index';
-        // $itens = Course::all(); // Todos
-        // $itens = Course::paginate(3); // limit de 3; Em blade: {{ $itens->links() }}
-        $itens = Course::all();
+        // $items = Course::all(); // Todos
+        // $items = Course::paginate(3); // limit de 3; Em blade: {{ $items->links() }}
+        $items = Course::all();
 
         // view() -> 'admin' é um diretório >>> views/admin/courses.blade.php
-        return view('admin.courses', compact('itens'), compact('goToSection'));
+        return view('admin.courses', compact('items', 'goToSection'));
 
     }
 
@@ -62,9 +62,9 @@ class CourseController extends Controller
         $dir = 'img/courses/';
         if ($request->hasFile('image')) {
             $image = $request->file('image');
-            $microtime = preg_replace('/[[:punct:].[:space:]]/', '', microtime()); // remove espaços pontuações
+            $microTime = preg_replace('/[[:punct:].[:space:]]/', '', microTime()); // remove espaços pontuações
             $ext = $image->guessClientExtension(); //retorna a extensão do arquivo
-            $imageName = 'img_' . $microtime . '.' . $ext; // Deve-se criar uma tabela especifica de imagem e add o id da imagem no nome
+            $imageName = 'img_' . $microTime . '.' . $ext; // Deve-se criar uma tabela especifica de imagem e add o id da imagem no nome
             $image->move($dir, $imageName);
             $data['image'] = $dir . $imageName;
         } else {
@@ -87,6 +87,7 @@ class CourseController extends Controller
      * Display the specified resource.
      *
      * @param  \App\Course $course
+     * @param $id
      * @return \Illuminate\Http\Response
      */
     public function show(Course $course, $id)
@@ -103,13 +104,14 @@ class CourseController extends Controller
         $record = Course::find($course->id);
 
         // view() -> 'admin' é um diretório >>> views/admin/courses.blade.php
-        return view('admin.courses', compact('goToSection'), compact('record'));
+        return view('admin.courses', compact('goToSection', 'record'));
     }
 
     /**
      * Show the form for editing the specified resource.
      *
      * @param  \App\Course $course
+     * @param $id
      * @return \Illuminate\Http\Response
      */
     public function edit(Course $course, $id)
@@ -126,7 +128,7 @@ class CourseController extends Controller
         $goToSection = 'edit';
         $record = Course::find($course->id);
 
-        return view('admin.courses', compact('goToSection'), compact('record'));
+        return view('admin.courses', compact('goToSection', 'record'));
     }
 
     /**
@@ -134,6 +136,7 @@ class CourseController extends Controller
      *
      * @param  \Illuminate\Http\Request $request
      * @param  \App\Course $course
+     * @param $id
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, Course $course, $id)
@@ -151,13 +154,11 @@ class CourseController extends Controller
         $dir = 'img/courses/';
         if ($request->hasFile('image')) {
             $image = $request->file('image');
-            $microtime = preg_replace('/[[:punct:].[:space:]]/', '', microtime()); // remove espaços pontuações
+            $microTime = preg_replace('/[[:punct:].[:space:]]/', '', microTime()); // remove espaços pontuações
             $ext = $image->guessClientExtension(); //retorna a extensão do arquivo
-            $imageName = 'img_' . $microtime . '.' . $ext; // Deve-se criar uma tabela especifica de imagem e add o id da imagem no nome
+            $imageName = 'img_' . $microTime . '.' . $ext; // Deve-se criar uma tabela especifica de imagem e add o id da imagem no nome
             $image->move($dir, $imageName);
             $data['image'] = $dir . $imageName;
-        } else {
-            // Nada a fazer, mantem a imagem, não altera!
         }
 
         if (isset($data['status'])) {
@@ -168,8 +169,7 @@ class CourseController extends Controller
 
         // dd($data);
         // dd($course->id); // Por segurança buscar pelo id originário($course) e não o enviado($request)
-        Course::find($course->id)->update($data); // Id da rota, não enviado por input
-        // $course->update($data);
+        $course->update($data);
 
         // return redirect()->back();
         return redirect()->route('admin.courses'); // !Não precisa das vars $item e $goToSection, a rota é chamada
@@ -179,6 +179,7 @@ class CourseController extends Controller
      * Remove the specified resource from storage.
      *
      * @param  \App\Course $course
+     * @param $id
      * @return \Illuminate\Http\Response
      */
     public function destroy(Course $course, $id)
@@ -191,7 +192,12 @@ class CourseController extends Controller
             $course = Course::find($id);
         }
 
-        Course::find($course->id)->delete();
+        try {
+            $course->delete();
+        } catch (\Exception $e) {
+            abort(403, 'Não foi possível deletar o registro!');
+        }
+
         return redirect()->route('admin.courses');
     }
 }

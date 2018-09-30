@@ -20,7 +20,7 @@
 
                         <div style="padding-top: 50px">
                             @guest
-                            {{--@if (Auth::guest())--}}
+                                {{--@if (Auth::guest())--}}
                                 <p>User não autenticado!</p>
                             @else
                                 <p>User <strong>{{ Auth::user()->name }}</strong> autenticado!</p>
@@ -31,4 +31,5 @@
                 </div>
             </div>
         </div>
+    </div>
 @endsection

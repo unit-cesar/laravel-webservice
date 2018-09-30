@@ -20,7 +20,8 @@ class Role extends Model
 
     /**
      * Add relationship between role and permission
-     *
+     * @param $perm
+     * @return array
      */
     public function addPerm($perm)
     {
@@ -30,7 +31,7 @@ class Role extends Model
         }
 
         if ($this->checkPerm($perm)) {
-            return;
+            return [];
         }
 
         // roles() -> é um metodo do Model User
@@ -39,7 +40,8 @@ class Role extends Model
 
     /**
      * Check if permission already has relationship to role
-     *
+     * @param $perm
+     * @return bool
      */
     public function checkPerm($perm)
     {
@@ -53,7 +55,8 @@ class Role extends Model
 
     /**
      * Removes relationship between role and permission
-     *
+     * @param $perm
+     * @return int
      */
     public function removePerm($perm)
     {

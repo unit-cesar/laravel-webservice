@@ -21,10 +21,10 @@ class RoleController extends Controller
         abort_if(Gate::denies('role-view'), 403);
 
         $goToSection = 'index';
-        $itens = Role::paginate(50); // limit de 3; Em blade: {{ $itens->links() }}
+        $items = Role::paginate(50); // limit de 3; Em blade: {{ $items->links() }}
 
         // view() -> 'admin' é um diretório >>> views/admin/roles.blade.php
-        return view('admin.roles', compact('itens', 'goToSection'));
+        return view('admin.roles', compact('items', 'goToSection'));
     }
 
     /**
@@ -61,8 +61,7 @@ class RoleController extends Controller
 
         // Verifica se o nome é unico
         if ((boolean)Role::where('name', '=', $data['name'])->first()) {
-            $messageError = 'Já existe um papel com o nome: ' . $data['name'];
-            return $messageError;
+            abort(403, 'Já existe um papel com o nome: ' . $data['name']);
         }
 
         Role::create($data);
@@ -74,6 +73,7 @@ class RoleController extends Controller
      * Display the specified resource.
      *
      * @param  \App\Role $role
+     * @param $id
      * @return \Illuminate\Http\Response
      */
     public function show(Role $role, $id)
@@ -97,6 +97,7 @@ class RoleController extends Controller
      * Show the form for editing the specified resource.
      *
      * @param  \App\Role $role
+     * @param $id
      * @return \Illuminate\Http\Response
      */
     public function edit(Role $role, $id)
@@ -123,6 +124,7 @@ class RoleController extends Controller
      *
      * @param  \Illuminate\Http\Request $request
      * @param  \App\Role $role
+     * @param $id
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, Role $role, $id)
@@ -155,8 +157,7 @@ class RoleController extends Controller
         // Verifica se o nome não é igual ao de outro papel, exceto o dele mesmo
         $roleCheck = Role::where('name', '=', $data['name'])->first();
         if (isset($roleCheck) && ($roleCheck->id != $id)) {
-            $messageError = 'Já existe um papel com o nome: ' . $data['name'];
-            return $messageError;
+            abort(403, 'Já existe um papel com o nome: ' . $data['name']);
         }
 
         // dd($course->id); // Por segurança buscar pelo id originário($course) e não o enviado($request)
@@ -170,6 +171,7 @@ class RoleController extends Controller
      * Remove the specified resource from storage.
      *
      * @param  \App\Role $role
+     * @param $id
      * @return \Illuminate\Http\Response
      */
     public function destroy(Role $role, $id)
@@ -179,14 +181,25 @@ class RoleController extends Controller
 
         $this->protectedRoles($id);
 
-        Role::find($id)->delete();
+        // Se a rota tiver nome diferente do Controller
+        if (!isset($role->id)) {
+            $role = Role::find($id);
+        }
+
+        try {
+            $role->delete();
+        } catch (\Exception $e) {
+            abort(403, 'Não foi possível deletar o registro!');
+        }
+
         return redirect()->route('admin.roles');
     }
 
     /**
      * Check if role is a SuperUser or Registered
      *
-     * @return boolean
+     * @param $id
+     * @return void
      */
     private function protectedRoles($id)
     {
