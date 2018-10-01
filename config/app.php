@@ -18,6 +18,63 @@ return [
     | composer dump-autoload
     | php artisan serve
     |
+    | API Steps
+    | composer require laravel/passport
+    | // Cria as migrates em: 'vendor/laravel/passport/database/migrations/...'
+    | php artisan migrate:status
+    | php artisan migrate
+    | php artisan passport:install
+
+        // Em: 'app/User.php':
+                class User extends Authenticatable
+                {
+                    use HasApiTokens, Notifiable;
+                  ...
+                }
+
+        // Em: 'app/Providers/AuthServiceProvider.php':
+            public function boot()
+            {
+                $this->registerPolicies();
+
+                Passport::routes();
+                ...
+            }
+
+        // Em: 'config/auth.php':
+
+                'guards' => [
+                    'web' => [
+                        'driver' => 'session',
+                        'provider' => 'users',
+                    ],
+
+                    'api' => [
+                        'driver' => 'passport',
+                        'provider' => 'users',
+                    ],
+                ],
+
+        // Rotas em: 'routes/api.php'
+
+                Route::middleware('auth:api')->get('/user', function (Request $request) {
+                    return $request->user();
+                });
+
+                // Sem proteção auth
+                Route::get('/test', function (Request $request) {
+                    return $request->all();
+                });
+
+
+        // Acessar via Postman:
+
+                http://127.0.0.1:8000/api/user
+                ***Pra funcionar deve estar habilitados as questões de login
+
+                http://127.0.0.1:8000/api/test?name=devesa&email=devesa@gmail.com
+    |
+    |
     */
 
     /*
