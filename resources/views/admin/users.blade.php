@@ -13,9 +13,11 @@
         <h3>Cadastrar novo usuário:</h3>
         <form action="{{ route('admin.users.store') }}" method="post" enctype="multipart/form-data">
             @csrf
-            <input type="text" placeholder="Nome do Usuário" name="name"><br>
-            <input type="text" placeholder="Email" name="email"><br>
-            <button disabled>Cadastrar novo usuário</button>
+            <input type="text" placeholder="Nome do Usuário" name="name" required="required"><br>
+            <input type="text" placeholder="Email" name="email" required="required"><br>
+            <input type="password" placeholder="Senha" name="password" required="required"><br>
+            <input type="password" placeholder="Confirme a senha" name="password_confirmation" required="required"><br>
+            <button>Cadastrar novo usuário</button>
         </form>
     </div>
 @endif

@@ -7,6 +7,8 @@ use App\User;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Validator;
 
 class UserController extends Controller
 {
@@ -50,7 +52,7 @@ class UserController extends Controller
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request $request
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function store(Request $request)
     {
@@ -59,7 +61,35 @@ class UserController extends Controller
 
         $data = $request->all();
 
-        return redirect()->route('admin.permissions', compact('data'));
+
+        $validator = Validator::make($data, [
+            'name' => 'required|string|max:255',
+            'email' => 'required|string|email|max:255|unique:users',
+            'password' => 'required|string|min:6|confirmed',
+        ]);
+
+        // dd($data);
+        // dd($validator->fails());
+        // dd($validator->errors());
+
+
+        if (!$validator->fails()) {
+
+            $user = User::create([
+                'name' => $data['name'],
+                'email' => $data['email'],
+                'password' => Hash::make($data['password']),
+            ]);
+
+            $user->addRole('2'); // Id 2 = Registered
+            // return $user;
+            return redirect()->route('admin.users');
+        } else {
+            // return response($data, 400);
+            abort(400, 'Erro ao validar dados!');
+            return redirect()->route('admin.users');
+        }
+
     }
 
     /**
@@ -206,4 +236,5 @@ class UserController extends Controller
         abort_if($roleObj->intersect(['SuperUser'])->count() > 0, 403,
             'Usuário "SuperUser" não pode ser apagado! Tente remover o papel "SuperUser".');
     }
+
 }

@@ -470,10 +470,10 @@
             <p>
             <h2>{{ $exception->getMessage() }}</h2></p>
 
-            <a href="/">
+            <a href="javascript:history.back()">
                 <button
                     class="bg-transparent text-grey-darkest font-bold uppercase tracking-wide py-3 px-6 border-2 border-grey-light hover:border-grey rounded-lg">
-                    Go Home
+                    Go Back
                 </button>
             </a>
         </div>

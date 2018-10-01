@@ -16,6 +16,11 @@
     <li>
         <a href="{{ route('admin.users') }}">USUÁRIOS</a>
     </li>
+    @can('user-create')
+        <li>
+            <a href="{{ route('admin.users.create') }}">CADASTRAR NOVO USUÁRIO</a>
+        </li>
+    @endcan
 </ul>
 @endcan
 @can('role-view')
