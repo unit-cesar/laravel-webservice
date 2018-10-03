@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Role;
 use App\User;
+use function Couchbase\defaultDecoder;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Gate;
@@ -28,9 +29,14 @@ class UserController extends Controller
 
         // API ou Blade
         if ($this->isAPI()) {
-            $user = User::all();
-            // (pendente) Enviar papeis de cada user ??????????????
-            return response($user, 200);
+            // $users = User::all();
+            $users = User::with('roles')->get(); // Users and roles relations
+
+            // Formas de filtrar pelo Role do usuário (Users of role) ou (Users with role)
+            // $superUsers = Role::where('name', 'SuperUser')->first()->users()->get();
+            // $superUsers = User::whereHas('roles', function($query){$query->where('name', 'SuperUser');})->get();
+
+            return response($users, 200);
         } else {
             $goToSection = 'index';
             $items = User::paginate(50); // limit de 50; Em blade: {{ $items->links() }}
