@@ -40,6 +40,12 @@ class User extends Authenticatable
         return $this->belongsToMany(Role::class);
     }
 
+    // Necessário para fazer logout com a API (delete token)
+    // php artisan make:model OauthAccessToken
+    public function deleteApiTokens(){
+        return $this->hasMany('\App\OauthAccessToken');
+    }
+
     public function isSuperUser()
     {
         $role = Role::where('name', '=', 'SuperUser')->firstOrFail();

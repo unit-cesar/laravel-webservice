@@ -34,6 +34,17 @@ Route::resourceVerbs([
     'edit' => 'editar',
 ]);
 
+
+// Para POST, PUT, DELETE pelo Blade, setar as rotas em 'routes/web.php
+// ->middleware('auth')
+
+// Para POST, PUT, DELETE pela API, setar as rotas em 'routes/api.php
+// ->middleware('auth:api')
+
+// Rotas em: 'routes/web.php' necessita de 'csrf-token'
+// Rotas em: 'routes/api.php' desabilitam e função 'csrf-token' automaticamente.
+
+// ROTAS PARA BLADE
 // Criar função para gerar todos grupos e controles de uma array
 Route::name('admin.')->prefix('adm')->middleware('auth')->namespace('Admin')->group(function () {
     // Name is prefix in code - admin.xyz (route) >>> Criar diretório para manter o padrão em Views -> views/admin

@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -14,40 +15,143 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-// api/user (GET) - Teste de rota protegida
-Route::middleware('auth:api')->get('/user', function (Request $request) {
-    // Com Postman enviar via GET (Headers)
-    // 'Accept' => 'application/json',
-    // 'Authorization' => 'Bearer '.$accessToken, // cuidado com espaço após Bearer!
-    return $request->user();
-});
+// Para POST, PUT, DELETE pelo Blade, setar as rotas em 'routes/web.php
+// ->middleware('auth')
 
-// api/test (GET)
-Route::get('/test', function (Request $request) {
-    // http://127.0.0.1:8000/api/test?name=devesa&email=devesa@gmail.com
-    return $request->all();
-});
+// Para POST, PUT, DELETE pela API, setar as rotas em 'routes/api.php
+// ->middleware('auth:api')
 
-// api/test (POST) - Teste de cadastro e geração de token(login)
-Route::post('/test', function (Request $request) {
-    // Com Postman enviar via POST (Body) [name, email, password]
+// Rotas em: 'routes/web.php' necessita de 'csrf-token'
+// Rotas em: 'routes/api.php' desabilitam e função 'csrf-token' automaticamente.
 
-    $user = \App\User::create([
-        'name' => $request['name'],
-        'email' => $request['email'],
-        // 'password' => Hash::make($request['password']),
-        'password' => $request['password'],
+// (pendente) Criar função para definir pra cada lang instalada
+Route::resourceVerbs([
+    // Verbos da URL - foo/criar
+
+    // pt-br
+    'create' => 'criar',
+    'edit' => 'editar',
+]);
+
+// ROTAS PARA API
+// Criar função para gerar todos grupos e controles de uma array
+Route::name('api.admin.')->prefix('adm')->middleware('auth:api')->namespace('Admin')->group(function () {
+    // Name is prefix in code - admin.xyz (route) >>> Criar diretório para manter o padrão em Views -> views/admin
+    // Prefix is prefix in URL - adm/xyz
+    // ->namespace('Admin') caso haja diretórios no Controller
+
+    // URL: adm/
+    Route::get('/', function () {
+        return view('admin.index');
+    });
+
+    // URL em português e codigo interno em inglês
+    Route::resource('cursos', 'CourseController')->names([
+        'index' => 'courses',
+        'create' => 'courses.create',
+        'store' => 'courses.store',
+        'show' => 'courses.show',
+        'edit' => 'courses.edit',
+        'update' => 'courses.update',
+        'destroy' => 'courses.destroy'
     ]);
 
-    // Personal Access Tokens
-    // https://laravel.com/docs/5.7/passport#personal-access-tokens
-    $user->token = $user->createToken($user->email)->accessToken;
+    Route::resource('usuarios', 'UserController')->names([
+        'index' => 'users',
+        'create' => 'users.create',
+        'store' => 'users.store',
+        'show' => 'users.show',
+        'edit' => 'users.edit',
+        'update' => 'users.update',
+        'destroy' => 'users.destroy'
+    ]);
 
-    return response($user, 201);
+    Route::resource('papeis', 'RoleController')->names([
+        'index' => 'roles',
+        'create' => 'roles.create',
+        'store' => 'roles.store',
+        'show' => 'roles.show',
+        'edit' => 'roles.edit',
+        'update' => 'roles.update',
+        'destroy' => 'roles.destroy'
+    ]);
+
+    Route::resource('permissoes', 'PermissionController')->names([
+        'index' => 'permissions',
+        'create' => 'permissions.create',
+        'store' => 'permissions.store',
+        'show' => 'permissions.show',
+        'edit' => 'permissions.edit',
+        'update' => 'permissions.update',
+        'destroy' => 'permissions.destroy'
+    ]);
 
 });
 
+
+
+Route::namespace('AuthApi')->group(function () {
+    // Name is prefix in code - admin.xyz (route) >>> Criar diretório para manter o padrão em Views -> views/admin
+    // Prefix is prefix in URL - adm/xyz
+    // ->namespace('Admin') caso haja diretórios no Controller
+
+    // Fazer metodos espelhados no Auth::routes(); de 'routes/web.php'
+    // Ou em: vendor/laravel/framework/src/Illuminate/Routing/Router.php
+
+    // Authentication Routes...
+    Route::get('login', 'LoginController@showLoginForm')->name('login');
+    Route::post('login', 'LoginController@login');
+    Route::post('logout', 'LoginController@logout')->name('logout');
+
+    // Registration Routes...
+    // Route::get('register', 'RegisterController@showRegistrationForm')->name('register');
+    // Route::post('register', 'RegisterController@register');
+
+    // // Password Reset Routes...
+    // Route::get('password/reset', 'ForgotPasswordController@showLinkRequestForm')->name('password.request');
+    // Route::post('password/email', 'ForgotPasswordController@sendResetLinkEmail')->name('password.email');
+    // Route::get('password/reset/{token}', 'ResetPasswordController@showResetForm')->name('password.reset');
+    // Route::post('password/reset', 'ResetPasswordController@reset')->name('password.update');
+    //
+    // // Emails Routes
+    // Route::get('email/verify', 'VerificationController@show')->name('verification.notice');
+    // Route::get('email/verify/{id}', 'VerificationController@verify')->name('verification.verify');
+    // Route::get('email/resend', 'VerificationController@resend')->name('verification.resend');
+
+});
+
+
 /*
+Route::resource('photos', 'PhotoController');
+// ou
+Route::resources([
+    'photos' => 'PhotoController',
+    'posts' => 'PostController'
+]);
+
+GET				/photos						index		photos.index
+GET				/photos/create				create	    photos.create
+POST			/photos						store		photos.store
+GET				/photos/{photo}				show		photos.show
+GET				/photos/{photo}/edit	    edit		photos.edit
+PUT/PATCH	    /photos/{photo}				update	    photos.update
+DELETE	    	/photos/{photo}				destroy	    photos.destroy
+*/
+
+/*
+ *
+ *
+
+    https://developer.mozilla.org/en-US/docs/Web/HTTP/Status
+
+    index   200/204
+    create  202/203
+    store   201/204
+    show    200/204
+    edit    202/203
+    update  200/204
+    destroy 200/204
+
 Respostas de sucesso
     200 OK
     201 Created
@@ -117,9 +221,35 @@ Respostas de erro do Servidor
 */
 
 
-/*
-
-"token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImp0aSI6ImYxZTVjZmJlZWEwY2YwYmYyZDNmNzEzNDhiMjI4MWU5YWEwNzc5Y2EzOGFiNDUyMzY0ZDE3Y2I5YjRmN2Y0YzQyY2ZmMDRhMDhmMmRhYmRhIn0.eyJhdWQiOiIxIiwianRpIjoiZjFlNWNmYmVlYTBjZjBiZjJkM2Y3MTM0OGIyMjgxZTlhYTA3NzljYTM4YWI0NTIzNjRkMTdjYjliNGY3ZjRjNDJjZmYwNGEwOGYyZGFiZGEiLCJpYXQiOjE1Mzg0MjkwMTEsIm5iZiI6MTUzODQyOTAxMSwiZXhwIjoxNTY5OTY1MDExLCJzdWIiOiIxOCIsInNjb3BlcyI6W119.JLSA4fKYxiiB22dptqqvDiYEWpooD1WaH5URPzrw-7Jl4yZqj0nDAcp8ntu7rGGbjl0gzoOtCusP1olF_DfyhkBv8bxTTI2DPRfj1MBdFm-D9yOEO-gpVN7dxSbefBErLAFgl3MZrlXyjgEjN_deM6rqQIqbdnPlkOqK2jZmRjLffb_mEE0rC5UbK8dE2ek5yqdnTg_SnMSx2FNLucjxbNP1LddTc7AActTiZrHuNGI9x14HeRUj8Ialcm3ucDDBUNHqDy8aQy8G44a2orpbauKC7-w4Hg8E2RuiLyG8x5Hz1tziV4rzawPgxKkNboemvyaRoDhy85vveOlyhypnBWP_vjo8Qcsh4HeVTMIAXMlVzvxi7bXr0X_QESmdttVxUTrsmcDLEmACMNPhW6KMYBNDIJlvBCLxsrisrl-ca5nTiFpQE-2DzONhoh1NLrHZATgF635hZ1AMQVCChvWYUCnvUhBC-cZebACnQO0qm4NghqrtC-w8AJ0gkQQQBB_C6rfXGm9irQQGDFQ3zqVleK6BNxYjeh47bRgVEReA0Ba12eXxnHaR8v1gTZEsEe74snMWySaeEirlBrUviKp0dmcAoUIxmF3DQcMRKly5eCfKwXUilZb8ohwJ4K1HDFX3Q-lgj1pK_FCrEeg5rW_3Quwf3rpFs59gS8jDda-EL_k"
-
-
- */
+// // api/user (GET) - Teste de rota protegida
+// Route::middleware('auth:api')->get('/user', function (Request $request) {
+//     // Com Postman enviar via GET (Headers)
+//     // 'Accept' => 'application/json',
+//     // 'Authorization' => 'Bearer '.$accessToken, // cuidado com espaço após Bearer!
+//     return $request->user();
+// });
+//
+// // api/test (GET)
+// Route::get('/test', function (Request $request) {
+//     // http://127.0.0.1:8000/api/test?name=devesa&email=devesa@gmail.com
+//     return $request->all();
+// });
+//
+// // api/test (POST) - Teste de cadastro e geração de token(login)
+// Route::post('/test', function (Request $request) {
+//     // Com Postman enviar via POST (Body) [name, email, password]
+//
+//     $user = \App\User::create([
+//         'name' => $request['name'],
+//         'email' => $request['email'],
+//         // 'password' => Hash::make($request['password']),
+//         'password' => $request['password'],
+//     ]);
+//
+//     // Personal Access Tokens
+//     // https://laravel.com/docs/5.7/passport#personal-access-tokens
+//     $user->token = $user->createToken($user->email)->accessToken;
+//
+//     return response($user, 201);
+//
+// });
