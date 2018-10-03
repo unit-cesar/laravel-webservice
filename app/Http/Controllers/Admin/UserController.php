@@ -75,7 +75,7 @@ class UserController extends Controller
         $data = $request->all();
 
         $validator = Validator::make($data, [
-            'name' => 'required|string|min:4|max:255',
+            'name' => 'required|string|min:3|max:255',
             'email' => 'required|string|email|max:255|unique:users',
             'password' => 'required|string|min:6|confirmed',
         ]);
@@ -94,12 +94,12 @@ class UserController extends Controller
 
             $user->addRole('2'); // Id 2 = Registered
 
-            // Personal Access Tokens
-            // https://laravel.com/docs/5.7/passport#personal-access-tokens
-            $user->token = $user->createToken($user->email)->accessToken;
-
             // API ou Blade
             if ($this->isAPI()) {
+                $user->roles;
+                // Personal Access Tokens - https://laravel.com/docs/5.7/passport#personal-access-tokens
+                // Não é preciso enviar para outro user
+                // $user->token = $user->createToken($user->email)->accessToken;
                 return response($user, 201);
             } else {
                 return redirect()->route('admin.users');
@@ -328,14 +328,14 @@ class UserController extends Controller
     {
         // dd($validator);
         if ($this->isAPI()) {
-            return response($validator->messages(), 200);
+            return response($validator->messages(), 203);
         } else {
             $messages = $validator->messages();
             $replayMessages = '';
             foreach ($messages->all() as $message) {
                 $replayMessages .= ' ' . $message;
             }
-            return abort(400, $replayMessages);
+            return abort(203, $replayMessages);
         }
     }
 }

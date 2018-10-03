@@ -99,13 +99,13 @@ Route::namespace('AuthApi')->group(function () {
     // Ou em: vendor/laravel/framework/src/Illuminate/Routing/Router.php
 
     // Authentication Routes...
-    Route::get('login', 'LoginController@showLoginForm')->name('login');
-    Route::post('login', 'LoginController@login');
-    Route::post('logout', 'LoginController@logout')->name('logout');
+    Route::get('entrar', 'LoginController@showLoginForm');
+    Route::post('entrar', 'LoginController@login');
+    Route::post('logout', 'LoginController@logout');
 
     // Registration Routes...
-    // Route::get('register', 'RegisterController@showRegistrationForm')->name('register');
-    // Route::post('register', 'RegisterController@register');
+    Route::get('cadastro', 'RegisterController@showRegistrationForm');
+    Route::post('cadastro', 'RegisterController@register');
 
     // // Password Reset Routes...
     // Route::get('password/reset', 'ForgotPasswordController@showLinkRequestForm')->name('password.request');

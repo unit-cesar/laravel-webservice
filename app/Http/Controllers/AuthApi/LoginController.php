@@ -10,6 +10,9 @@ use Illuminate\Support\Facades\Validator;
 class LoginController extends Controller
 {
 
+    /**
+     * LoginController constructor.
+     */
     public function __construct()
     {
         $this->middleware('auth:api')->except('login');
@@ -51,9 +54,10 @@ class LoginController extends Controller
                 // Authentication passed...
                 $user = Auth()->user();
                 $user->token = $user->createToken($user->email)->accessToken;
+                $user->roles;
                 return response($user, 200);
             } else {
-                return response(['status' => 'false'], 403);
+                return response(['status' => 'false','message' => 'Erro ao autenticar!'], 403);
             }
         } else {
             return response($validator->messages(), 403);
