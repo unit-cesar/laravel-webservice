@@ -24,15 +24,6 @@ use Illuminate\Support\Facades\Route;
 // Rotas em: 'routes/web.php' necessita de 'csrf-token'
 // Rotas em: 'routes/api.php' desabilitam e função 'csrf-token' automaticamente.
 
-// (pendente) Criar função para definir pra cada lang instalada
-Route::resourceVerbs([
-    // Verbos da URL - foo/criar
-
-    // pt-br
-    'create' => 'criar',
-    'edit' => 'editar',
-]);
-
 // ROTAS PARA API
 // Criar função para gerar todos grupos e controles de uma array
 Route::name('api.admin.')->prefix('adm')->middleware('auth:api')->namespace('Admin')->group(function () {
@@ -99,13 +90,13 @@ Route::namespace('AuthApi')->group(function () {
     // Ou em: vendor/laravel/framework/src/Illuminate/Routing/Router.php
 
     // Authentication Routes...
-    Route::get('entrar', 'LoginController@showLoginForm');
-    Route::post('entrar', 'LoginController@login');
+    Route::get('login', 'LoginController@showLoginForm');
+    Route::post('login', 'LoginController@login');
     Route::post('logout', 'LoginController@logout');
 
     // Registration Routes...
-    Route::get('cadastro', 'RegisterController@showRegistrationForm');
-    Route::post('cadastro', 'RegisterController@register');
+    Route::get('register', 'RegisterController@showRegistrationForm');
+    Route::post('register', 'RegisterController@register');
 
     // // Password Reset Routes...
     // Route::get('password/reset', 'ForgotPasswordController@showLinkRequestForm')->name('password.request');
