@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Admin;
 
 use App\Role;
 use App\User;
-use function Couchbase\defaultDecoder;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Gate;
@@ -124,7 +123,7 @@ class UserController extends Controller
      * @param $id
      * @return \Illuminate\Http\Response
      */
-    public function show(User $user, $id)
+    public function show(User $user, $id = null)
     {
         // ACL
         if (Gate::denies('user-view')) {
@@ -138,8 +137,19 @@ class UserController extends Controller
 
         // API ou Blade
         if ($this->isAPI()) {
-           $user->roles;
-            return response($user, 200);
+
+            $userAuth = Auth()->user(); // Nos Apps somente é retornado dados do user autenticado
+            // Verifica se id enviado junto com token é igual ao do user autenticado
+            if ($userAuth->id == $user->id) {
+                $user->roles;
+
+                return response(['status' => '202', $user], 202);
+            } else {
+                return response(['status' => '203', 'message' => 'Usuário autenticado não corresponde com id enviado!'],
+                    203);
+                // return abort(203, 'Usuário autenticado não corresponde com id enviado!');
+            }
+
         } else {
             $goToSection = 'show';
             $record = $user;
@@ -156,7 +166,7 @@ class UserController extends Controller
      * @param $id
      * @return \Illuminate\Http\Response
      */
-    public function edit(User $user, $id)
+    public function edit(User $user, $id = null)
     {
         // ACL
         if (Gate::denies('user-update')) {
@@ -188,7 +198,7 @@ class UserController extends Controller
      * @param $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, User $user, $id)
+    public function update(Request $request, User $user, $id = null)
     {
         // ACL
         if (Gate::denies('user-update')) {
@@ -247,20 +257,20 @@ class UserController extends Controller
      * @return \Illuminate\Http\Response|void
      * @throws \Exception
      */
-    public function destroy(User $user, $id)
+    public function destroy(User $user, $id = null)
     {
         // ACL
         if (Gate::denies('user-delete')) {
             return $this->apiOrBlade();
         }
 
-        if($this->protectedUsers($id)){
-            return $this->protectedUsers($id);
-        }
-
         // Se a rota tiver nome diferente do Controller
         if (!isset($user->id)) {
             $user = User::find($id);
+        }
+
+        if ($this->protectedUsers($user->id)) {
+            return $this->protectedUsers($user->id);
         }
 
         $user->delete();
@@ -284,7 +294,7 @@ class UserController extends Controller
     private function protectedUsers($id)
     {
         // Users of tests
-        if($id <= 6) {
+        if ($id <= 6) {
             return $this->apiOrBlade('Este usuário é de TESTES e não pode ser apagado!');
         }
 
@@ -295,7 +305,7 @@ class UserController extends Controller
             $roleObj->push($role->name);
         }
         // dd($roleObj->intersect(['SuperUser'])->count());
-        if($roleObj->intersect(['SuperUser'])->count() > 0) {
+        if ($roleObj->intersect(['SuperUser'])->count() > 0) {
             return $this->apiOrBlade('Usuário SuperUser não pode ser apagado! Tente remover o papel SuperUser.');
         }
 

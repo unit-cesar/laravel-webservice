@@ -10,9 +10,11 @@ return [
     | allowedOrigins, allowedHeaders and allowedMethods can be set to array('*')
     | to accept any value.
     |
+    | https://github.com/barryvdh/laravel-cors
+    |
     */
-   
-    'supportsCredentials' => false,
+
+    'supportsCredentials' => true,
     'allowedOrigins' => ['*'],
     'allowedOriginsPatterns' => [],
     'allowedHeaders' => ['*'],

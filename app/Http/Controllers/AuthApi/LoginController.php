@@ -27,11 +27,11 @@ class LoginController extends Controller
     {
         if (Auth::check()) {
             // false -> User já autenticado!
-            return response(['status' => 'false', 'message' => 'Usuário já está autenticado!'], 200);
+            return response(['message' => 'Usuário já está autenticado!'], 200);
         }
 
         // Não precisa retornar, pois já retorna code 401 pelo '->middleware('auth:api')'
-        // return response(['status' => 'true'], 401);
+        // return response('', 401);
     }
 
     /**
@@ -57,10 +57,10 @@ class LoginController extends Controller
                 $user->roles;
                 return response($user, 200);
             } else {
-                return response(['status' => 'false','message' => 'Erro ao autenticar!'], 403);
+                return response(['message' => 'Erro ao autenticar!'], 203);
             }
         } else {
-            return response($validator->messages(), 403);
+            return response($validator->messages(), 203);
         }
     }
 
@@ -77,6 +77,6 @@ class LoginController extends Controller
             // php artisan make:model OauthAccessToken
             Auth::user()->deleteApiTokens()->delete();
         }
-        return response('true', 200);
+        return response(['status' => '200'], 200);
     }
 }

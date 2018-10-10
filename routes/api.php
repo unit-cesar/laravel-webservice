@@ -24,6 +24,10 @@ use Illuminate\Support\Facades\Route;
 // Rotas em: 'routes/web.php' necessita de 'csrf-token'
 // Rotas em: 'routes/api.php' desabilitam e função 'csrf-token' automaticamente.
 
+Route::get('/test', function () {
+    return 'ok';
+})->middleware('auth:api');
+
 // ROTAS PARA API
 // Criar função para gerar todos grupos e controles de uma array
 Route::name('api.admin.')->prefix('adm')->middleware('auth:api')->namespace('Admin')->group(function () {
@@ -37,7 +41,7 @@ Route::name('api.admin.')->prefix('adm')->middleware('auth:api')->namespace('Adm
     });
 
     // URL em português e codigo interno em inglês
-    Route::resource('cursos', 'CourseController')->names([
+    Route::resource('courses', 'CourseController')->names([
         'index' => 'courses',
         'create' => 'courses.create',
         'store' => 'courses.store',
@@ -47,7 +51,7 @@ Route::name('api.admin.')->prefix('adm')->middleware('auth:api')->namespace('Adm
         'destroy' => 'courses.destroy'
     ]);
 
-    Route::resource('usuarios', 'UserController')->names([
+    Route::resource('users', 'UserController')->names([
         'index' => 'users',
         'create' => 'users.create',
         'store' => 'users.store',
@@ -57,7 +61,7 @@ Route::name('api.admin.')->prefix('adm')->middleware('auth:api')->namespace('Adm
         'destroy' => 'users.destroy'
     ]);
 
-    Route::resource('papeis', 'RoleController')->names([
+    Route::resource('roles', 'RoleController')->names([
         'index' => 'roles',
         'create' => 'roles.create',
         'store' => 'roles.store',
@@ -67,7 +71,7 @@ Route::name('api.admin.')->prefix('adm')->middleware('auth:api')->namespace('Adm
         'destroy' => 'roles.destroy'
     ]);
 
-    Route::resource('permissoes', 'PermissionController')->names([
+    Route::resource('permissions', 'PermissionController')->names([
         'index' => 'permissions',
         'create' => 'permissions.create',
         'store' => 'permissions.store',
