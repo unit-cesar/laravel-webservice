@@ -41,7 +41,9 @@ return [
     |
     */
 
-    'name' => env('APP_NAME', 'Laravel'),
+    'name' => env('APP_NAME', 'Positive-20.06'),
+
+	'version' => env('APP_VERSION', 'v20.06-1.0.1-dev'),
 
     /*
     |--------------------------------------------------------------------------
