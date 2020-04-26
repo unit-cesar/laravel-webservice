@@ -9,18 +9,21 @@ return [
     | git clone...
     | install npm
     | composer update
-    | //Altera nome, versão...
-    | //Criar banco (utf8_general_ci)
+    | //Alterar nome, versão...
+    | //Criar BD (utf8_general_ci)
     | //Editar '.env' e 'config/database.php'
     | php artisan migrate:refresh --seed
-    | //Renova APP_KEY
+    | //Renovar APP_KEY
     | php artisan key:generate
     | composer dump-autoload
+    | //Recriar API
+    | php artisan passport:install
+    | php artisan passport:client --personal
     | php artisan serve
     |
     | API Steps
     | composer require laravel/passport
-    | // Cria as migrates em: 'vendor/laravel/passport/database/migrations/...'
+    | // Criar as migrates em: 'vendor/laravel/passport/database/migrations/...'
     | php artisan migrate:status
     | php artisan migrate
     | php artisan passport:install
@@ -135,7 +138,7 @@ return [
     |
     */
 
-    'key' => env('APP_KEY', 'base64:HYPx5FgozPiCQiBGDLZ7YWHUMyrzFdpyq+CbgLHOO40='),
+    'key' => env('APP_KEY', 'base64:fzRsho/dTofvuRGotzJ4h9YfDKIuHtl/q82j1qCOWzs='),
 
     'cipher' => 'AES-256-CBC',
 
