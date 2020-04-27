@@ -103,11 +103,14 @@ Route::namespace('AuthApi')->group(function () {
     Route::post('register', 'RegisterController@register');
 
     // // Password Reset Routes...
+    // Ver upgrade das versões em: https://laravel.com/docs/5.8/upgrade#authentication
+
     // Route::get('password/reset', 'ForgotPasswordController@showLinkRequestForm')->name('password.request');
     // Route::post('password/email', 'ForgotPasswordController@sendResetLinkEmail')->name('password.email');
     // Route::get('password/reset/{token}', 'ResetPasswordController@showResetForm')->name('password.reset');
     // Route::post('password/reset', 'ResetPasswordController@reset')->name('password.update');
-    //
+
+
     // // Emails Routes
     // Route::get('email/verify', 'VerificationController@show')->name('verification.notice');
     // Route::get('email/verify/{id}', 'VerificationController@verify')->name('verification.verify');
