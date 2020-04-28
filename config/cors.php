@@ -3,23 +3,25 @@
 return [
 
     /*
-    |--------------------------------------------------------------------------
-    | Laravel CORS
-    |--------------------------------------------------------------------------
-    |
-    | allowedOrigins, allowedHeaders and allowedMethods can be set to array('*')
-    | to accept any value.
-    |
-    | https://github.com/barryvdh/laravel-cors
-    |
-    */
+     * You can enable CORS for 1 or multiple paths.
+     * Example: ['api/*']
+     */
+    'paths' => ['api/*'],
+    'allowed_methods' => ['*'],
+    'allowed_origins' => ['*'],
+    'allowed_origins_patterns' => [],
+    'allowed_headers' => ['*'],
+    'exposed_headers' => false,
+    'max_age' => false,
+    'supports_credentials' => true,
 
-    'supportsCredentials' => true,
-    'allowedOrigins' => ['*'],
-    'allowedOriginsPatterns' => [],
-    'allowedHeaders' => ['*'],
-    'allowedMethods' => ['*'],
-    'exposedHeaders' => [],
-    'maxAge' => 0,
+    // Archive
+    // 'allowedMethods' => ['*'],
+    // 'allowedOrigins' => ['*'],
+    // 'allowedOriginsPatterns' => [],
+    // 'allowedHeaders' => ['*'],
+    // 'exposedHeaders' => [],
+    // 'maxAge' => 0,
+    // 'supportsCredentials' => true,
 
 ];
